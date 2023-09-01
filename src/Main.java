@@ -1,21 +1,44 @@
 import java.util.Scanner;
 
+/**
+ * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Main.java<br>
+ * <p>
+ * The class {@code Main} is the main entry point to the program called Library Management System.
+ * <p>
+ * Library Management System is a console-based  application. This application is developed to help users maintain a
+ * collection of books. The user will have the ability to add new books to the collection, remove a book from the
+ * collection using its ID number and lastly list all books currently in the collection. The data will be stored in a
+ * text file and be formatted as follows:<br><br>
+ *
+ * <p>(ID Number,Title,Author)
+ * <p>1,To Kill a Mockingbird,Harper Lee<br>
+ * <p>2,1984,George Orwell<br>
+ * <p>3,The Great Gatsby,F. Scott Fitzgerald<br><br>
+ *
+ * <p>
+ * This class presents the user with a menu of the following 4 options: display book collection, remove a book from
+ * collection, add a book to the collection, end application. This call will make calls to the classes Databse.java and
+ * Book.java to store data and access necessary fuctions for viewing and manipulation of data.
+ * <p>
+ */
 public class Main {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String s = "";
+
+        // database object created to store books at runtime and give access to methods to interact, or make changes
+        // to the database object
         Database database = new Database();
 
         // Loading any books currently in the database on program launch
         database.getBooks();
 
         // Printing menu options to console
-        String menu = "-".repeat(40) + "\n" + "Application Menu\n" + "-".repeat(40) + "\n" + "'v' - to display book " +
-                "collection\n" + "'d' - to remove a book from collection\n" + "'a' - to add a book to the " +
-                "collection\n" + "'q' - to end application\n" + "-".repeat(40);
+        String menu =
+                "-".repeat(40) + "\n" + "Application Menu\n" + "-".repeat(40) + "\n" + "'v' - to display book " +
+                        "collection\n" + "'d' - to remove a book from collection\n" + "'a' - to add a book to the " + "collection\n" + "'q' - to end application\n" + "-".repeat(40);
         System.out.printf(menu);
-
 
         while (!s.equals("q")) {
             System.out.printf("\nPlease type the letter associated with the action you would like to perform: ");
@@ -23,7 +46,6 @@ public class Main {
             System.out.println();
 
             switch (s) {
-
                 case "v":
                     database.showBooks();
                     break;
