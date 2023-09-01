@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -11,17 +10,13 @@ import java.util.TreeSet;
 
 
 /**
- * Darren Chance<br>
- * CEN 3024 - Software Development 1<br>
- * August 28, 2023<br>
- * Database.java<br>
+ * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Database.java<br>
  * <p>
  * The {@code Database} class represents a library database.
  * <p>
- * The class {@code Database} contains methods for reading from a library
- * database file, writing to a library database file, adding books to a library
- * database file, deleting books from a library database file and displaying a
- * database to a console.
+ * The class {@code Database} contains methods for reading from a library database file, writing to a library database
+ * file, adding books to a library database file, deleting books from a library database file and displaying a database
+ * to a console.
  */
 
 public class Database {
@@ -37,10 +32,8 @@ public class Database {
     /**
      * Method Name: getBooks
      * <p>
-     * This method loads new books from the library database text file, the books
-     * are stored as book objects in a Hashtable with key-value pairs. By default
-     * the keys are the book id numbers.
-     *
+     * This method loads new books from the library database text file, the books are stored as book objects in a
+     * Hashtable with key-value pairs. By default, the keys are the book id numbers.
      *
      * @return none
      */
@@ -68,12 +61,68 @@ public class Database {
 
     }
 
+    public void addBooks() {
+
+        Scanner in = new Scanner(System.in);
+        String s = "";
+
+        boolean isValidInteger = false;
+
+        // Request book id from user, if invalid input received user is giving option to enter again or cancel with 'c'
+        while (!s.equals("c".toLowerCase())) {
+            System.out.printf("Please enter the book id: ");
+            s = in.nextLine();
+
+            try {
+                id = Integer.valueOf(s);
+                isValidInteger = true;
+                // Code below is skipped if not input not valid integer
+                s = "c"; // breaks out of loop on receiving valid int input
+                System.out.println();
+
+            } catch (NumberFormatException e) {
+
+                if (!s.equals("c".toLowerCase())) {
+                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " + "main menu --");
+                }
+
+            }
+
+        }
+        // Proceed to get book title from user input only if user previously entered a valid id number
+        if (isValidInteger) {
+            System.out.printf("Please enter the book title: ");
+            title = in.nextLine();
+            System.out.println();
+            // Get book author from user input
+            System.out.printf("Please enter the book author: ");
+            author = in.nextLine();
+            System.out.println();
+
+            Book book = new Book(id, title, author);
+            books.put(id, book);
+
+            // Sort books by id and overwrite library database
+            keys = new TreeSet<>(books.keySet());
+            List<String> list = new ArrayList<String>();
+            // Update library database file with books
+            for (Integer i : keys) {
+                id = books.get(i).getId();
+                title = books.get(i).getTitle();
+                author = books.get(i).getAuthor();
+                list.add(String.format("%d,%s,%s", id, title, author));
+                writeFile(list, "Library Database.txt");
+            }
+
+        }
+
+
+    }
+
     /**
      * Method Name: showBooks
      * <p>
-     * This method sorts the books Hashtable by key, then displays the collection to
-     * the console in order by id.
-     *
+     * This method sorts the books Hashtable by key, then displays the collection to the console in order by id.
      *
      * @return none
      */
@@ -86,8 +135,8 @@ public class Database {
 
         // Display message to user that library is empty
         if (keys.size() <= 0) {
-            System.out.printf("-- EMPTY --\n\n" + "Use 'a' menu option to load new books\n"
-                    + "from the Library Database text file\n");
+            System.out.printf("-- EMPTY --\n\n" + "Use 'a' menu option to load new books\n" + "from the Library " +
+                    "Database text file\n");
         } else {
             // Iterate through books Hashtable and display book collection to user
             for (Integer i : keys) {
@@ -104,8 +153,8 @@ public class Database {
     /**
      * Method Name: readFile
      * <p>
-     * This method reads a library database text file, then adds each line of text
-     * to a list. The list is then returned.
+     * This method reads a library database text file, then adds each line of text to a list. The list is then
+     * returned.
      *
      * @param file A string specifying the file name to open for reading
      * @return a list of strings separated by new lines from the read text file
@@ -127,15 +176,11 @@ public class Database {
     /**
      * Method Name: deleteBooks
      * <p>
-     * This method deletes a single book from the library database text file based
-     * on book id received from user text input from console. If the book id does
-     * not exist in the database the user will receive an error message and no
-     * changes will be made to the database. The database text file is then updated
-     * to reflect the change.
-     *
+     * This method deletes a single book from the library database text file based on book id received from user text
+     * input from console. If the book id does not exist in the database the user will receive an error message and no
+     * changes will be made to the database. The database text file is then updated to reflect the change.
      *
      * @return none
-     *
      * @throws NumberFormatException if the user input is a non integer type.
      */
     public void deleteBooks() {
@@ -190,8 +235,8 @@ public class Database {
     /**
      * Method Name: writeFile
      * <p>
-     * This method writes to the library database text file, then adds each line of
-     * text to a list. The list is then returned containing each line of text
+     * This method writes to the library database text file, then adds each line of text to a list. The list is then
+     * returned containing each line of text
      *
      * @param list A list of strings containing books details
      * @param file A string specifying the file name to open
