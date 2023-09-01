@@ -83,7 +83,8 @@ public class Database {
             } catch (NumberFormatException e) {
 
                 if (!s.equals("c".toLowerCase())) {
-                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " + "main menu --");
+                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " +
+                            "main menu --");
                 }
 
             }
