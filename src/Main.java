@@ -40,8 +40,10 @@ public class Main {
         database.getBooks();
 
         // Printing menu options to console
-        String menu = "-".repeat(40) + "\nApplication Menu\n" + "-".repeat(40) + "\n'v' - to display book collection" +
-                      "\n'd' - to remove a book from collection" + "\n'a' - to add a book to the " + "collection" +
+        String menu = "-".repeat(40) + "\nApplication Menu\n" + "-".repeat(40) +
+                      "\n'v' - to display book collection" +
+                      "\n'd' - to remove a book from collection" +
+                      "\n'a' - to add a book to the " + "collection" +
                       "\n'q' - to end application\n" + "-".repeat(40);
 
 

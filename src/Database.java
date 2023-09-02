@@ -35,8 +35,6 @@ public class Database {
      * @return none
      */
     public void getBooks() {
-
-
         books = new Hashtable<Integer, Book>();
         List<String> list = Database.readFile("Library Database.txt");
 
@@ -55,12 +53,9 @@ public class Database {
             books.put(id, book);
         }
         System.out.println("-- Your collection has been succesfully loaded from the library database text file --\n");
-
     }
 
-
     public void addBooks() {
-
         Scanner in = new Scanner(System.in);
         String s = "";
 
