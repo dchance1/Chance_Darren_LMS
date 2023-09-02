@@ -79,8 +79,7 @@ public class Database {
                 System.out.println();
             } catch (NumberFormatException e) {
                 if (!s.equals("c".toLowerCase())) {
-                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " +
-                            "main menu --\n");
+                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " + "main menu --\n");
                 }
             }
         }
@@ -112,7 +111,8 @@ public class Database {
                     writeFile(list, "Library Database.txt");
                 }
             } else {
-                System.out.printf("-- Book already exists with id number '" + id + "' return --\n");
+                System.out.printf("-- Book already exists with id number '" + id + "' returning to the main " +
+                        "menu --\n");
             }
         }
     }
@@ -193,7 +193,7 @@ public class Database {
             isValidID = true;
             System.out.println();
         } catch (NumberFormatException e) {
-            System.out.println("\n-- Invalid input, please enter a valid ID number --");
+            System.out.println("\n-- Invalid input, please enter a valid ID number, returning to the main menu --");
         }
 
         // If id number is a valid integer and the id key is in the database Hashtable
