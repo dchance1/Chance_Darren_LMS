@@ -12,12 +12,12 @@ import java.util.Scanner;
  *
  * <p>(ID
  * Number,Title, Author)
- * <p>1,To Kill a
- * Mockingbird, Harper Lee<br>
- * <p>2,1984,George
- * Orwell<br>
- * <p>3,The Great
- * Gatsby,F. Scott Fitzgerald<br ><br>
+ * <p>
+ * 1,To Kill a Mockingbird, Harper Lee<br>
+ * <p>
+ * 2,1984,George Orwell<br>
+ * <p>
+ * 3,The Great Gatsby,F. Scott Fitzgerald<br ><br>
  *
  * <p>
  * This class presents the user with a menu of the following 4 options: display book collection, remove a book from
