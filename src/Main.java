@@ -45,8 +45,6 @@ public class Main {
                       "\n'd' - to remove a book from collection" +
                       "\n'a' - to add a book to the " + "collection" +
                       "\n'q' - to end application\n" + "-".repeat(40);
-
-
         System.out.printf(menu);
 
         while (!s.equals("q")) {
@@ -62,7 +60,6 @@ public class Main {
                     database.deleteBooks();
                     break;
                 case "a":
-                    //database.getBooks();
                     database.addBooks();
                     break;
                 case "q":
