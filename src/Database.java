@@ -8,7 +8,6 @@ import java.util.Scanner;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-
 /**
  * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Database.java<br>
  * <p>
@@ -20,14 +19,12 @@ import java.util.TreeSet;
  */
 
 public class Database {
-
     private static String title = "";
     private static String author = "";
     private static int id = 0;
     private static String[] bookParse;
     private static Hashtable<Integer, Book> books;
     private static SortedSet<Integer> keys;
-
 
     /**
      * Method Name: getBooks
@@ -61,6 +58,7 @@ public class Database {
 
     }
 
+
     public void addBooks() {
 
         Scanner in = new Scanner(System.in);
@@ -76,48 +74,47 @@ public class Database {
             try {
                 id = Integer.valueOf(s);
                 isValidInteger = true;
-                // Code below is skipped if not input not valid integer
+                // Code below is skipped if input not valid integer
                 s = "c"; // breaks out of loop on receiving valid int input
                 System.out.println();
-
             } catch (NumberFormatException e) {
-
                 if (!s.equals("c".toLowerCase())) {
                     System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " +
-                            "main menu --");
+                            "main menu --\n");
                 }
-
             }
-
         }
-        // Proceed to get book title from user input only if user previously entered a valid id number
+
+        // Proceed to get book title from user input only if user previously entered a valid id number and if the id
+        // number does not already exist in the database. This prevents duplicate books or book with the same id key
+        // being added
         if (isValidInteger) {
-            System.out.printf("Please enter the book title: ");
-            title = in.nextLine();
-            System.out.println();
-            // Get book author from user input
-            System.out.printf("Please enter the book author: ");
-            author = in.nextLine();
-            System.out.println();
-
-            Book book = new Book(id, title, author);
-            books.put(id, book);
-
-            // Sort books by id and overwrite library database
-            keys = new TreeSet<>(books.keySet());
-            List<String> list = new ArrayList<String>();
-            // Update library database file with books
-            for (Integer i : keys) {
-                id = books.get(i).getId();
-                title = books.get(i).getTitle();
-                author = books.get(i).getAuthor();
-                list.add(String.format("%d,%s,%s", id, title, author));
-                writeFile(list, "Library Database.txt");
+            if (!books.containsKey(id)) {
+                System.out.printf("Please enter the book title: ");
+                title = in.nextLine();
+                System.out.println();
+                // Get book author from user input
+                System.out.printf("Please enter the book author: ");
+                author = in.nextLine();
+                System.out.println();
+                // add book object to books Hashtable
+                Book book = new Book(id, title, author);
+                books.put(id, book);
+                // Sort books by id and overwrite library database
+                keys = new TreeSet<>(books.keySet());
+                List<String> list = new ArrayList<String>();
+                // Update library database file with books
+                for (Integer i : keys) {
+                    id = books.get(i).getId();
+                    title = books.get(i).getTitle();
+                    author = books.get(i).getAuthor();
+                    list.add(String.format("%d,%s,%s", id, title, author));
+                    writeFile(list, "Library Database.txt");
+                }
+            } else {
+                System.out.printf("-- Book already exists with id number '" + id + "' return --\n");
             }
-
         }
-
-
     }
 
     /**
