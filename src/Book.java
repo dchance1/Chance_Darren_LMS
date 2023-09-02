@@ -4,7 +4,7 @@
  * August 28, 2023<br>
  * Book.java<br>
  * <p>
- * 
+ * <p>
  * The class {@code Book} creates a book and stores the book's details. This allows for easy retrival of details such as
  * title, book id number and author. This class does not contain any methods asside from getters and setters.
  */

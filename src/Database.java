@@ -79,7 +79,8 @@ public class Database {
                 System.out.println();
             } catch (NumberFormatException e) {
                 if (!s.equals("c".toLowerCase())) {
-                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " + "main menu --\n");
+                    System.out.println("\n-- Invalid input, enter a valid ID number or enter 'c' to return to the " +
+                                       "main menu --\n");
                 }
             }
         }
@@ -111,8 +112,8 @@ public class Database {
                     writeFile(list, "Library Database.txt");
                 }
             } else {
-                System.out.printf("-- Book already exists with id number '" + id + "' returning to the main " +
-                        "menu --\n");
+                System.out.printf(
+                        "-- Book already exists with id number '" + id + "' returning to the main " + "menu" + " --\n");
             }
         }
     }
@@ -134,7 +135,7 @@ public class Database {
         // Display message to user that library is empty
         if (keys.size() <= 0) {
             System.out.printf("-- EMPTY --\n\n" + "Use 'a' menu option to load new books\n" + "from the Library " +
-                    "Database text file\n");
+                              "Database text file\n");
         } else {
             // Iterate through books Hashtable and display book collection to user
             for (Integer i : keys) {
