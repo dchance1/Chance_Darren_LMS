@@ -11,13 +11,13 @@
 
 public class Book {
     private String title;
-    private int id;
+    private int BarcodeID;
     private String author;
 
-    public Book(int id, String title, String author) {
+    public Book(int BarcodeID, String title, String author) {
         super();
         this.author = author;
-        this.id = id;
+        this.BarcodeID = BarcodeID;
         this.title = title;
     }
 
@@ -29,12 +29,12 @@ public class Book {
         this.author = author;
     }
 
-    public int getId() {
-        return id;
+    public int getBarcodeID() {
+        return BarcodeID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBarcodeID(int barcodeID) {
+        this.BarcodeID = barcodeID;
     }
 
     public String getTitle() {

@@ -8,7 +8,8 @@ import java.util.Scanner;
  * Library Management System is a console-based application. This application is developed to help users maintain a
  * collection of books. The user will have the ability to add new books to the collection, remove a book from the
  * collection using its ID number and lastly list all books currently in the collection. The data will be stored in a
- * text file and be formatted as follows:<br><br>
+ * text file and be formatted as follows:a
+ * <br><br>
  *
  * <p>(ID
  * Number,Title, Author)

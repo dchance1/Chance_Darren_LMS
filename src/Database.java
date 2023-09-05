@@ -100,7 +100,7 @@ public class Database {
                 List<String> list = new ArrayList<String>();
                 // Update library database file with books
                 for (Integer i : keys) {
-                    id = books.get(i).getId();
+                    id = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
                     list.add(String.format("%d,%s,%s", id, title, author));
@@ -134,7 +134,7 @@ public class Database {
         } else {
             // Iterate through books Hashtable and display book collection to user
             for (Integer i : keys) {
-                id = books.get(i).getId();
+                id = books.get(i).getBarcodeID();
                 title = books.get(i).getTitle();
                 author = books.get(i).getAuthor();
                 System.out.printf("%d, %s, %s\n", id, title, author);
@@ -178,7 +178,7 @@ public class Database {
      * @throws NumberFormatException if the user input is a non integer type.
      */
     public void deleteBooks() {
-        System.out.printf("Please enter the book id number that you want to delete: ");
+        System.out.printf("Please enter the barcode number that you want to delete: ");
         Scanner in = new Scanner(System.in);
 
         Boolean isValidID = false;
@@ -213,17 +213,31 @@ public class Database {
 
                 // Update library database file with books
                 for (Integer i : keys) {
-                    id = books.get(i).getId();
+                    id = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
                     list.add(String.format("%d,%s,%s", id, title, author));
                     writeFile(list, "Library Database.txt");
                 }
-                System.out.println("-- Book titled \"" + deletedBook + "\" successfully deleted --");
+                String message = "-- Book titled \"" + deletedBook + "\" successfully deleted --";
+                printMessage("-Confirmation Message-",message);
+
+                showBooks();
             } else {
                 System.out.println("-- Book with id number: " + id + " does not exist --");
             }
         }
+    }
+
+    private void printMessage(String messageHeader, String message) {
+        int len = (message.length() - messageHeader.length()) / 2;
+        String s = " ".repeat(len) + messageHeader;
+        int len2 = message.length() - s.length();
+
+        s = "-".repeat(len) + messageHeader + "-".repeat(len2) + "\n" +
+            message + "\n" + "-".repeat(message.length());
+
+        System.out.println(s + "\n");
     }
 
     /**
