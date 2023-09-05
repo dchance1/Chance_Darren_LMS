@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Main.java<br>
+ * Darren Chance<br> CEN 3024 - Software Development 1<br> September 4, 2023<br> Main.java<br>
  * <p>
  * The class {@code Main} is the main entry point to the program called Library Management System.
  * <p>
@@ -10,8 +10,8 @@ import java.util.Scanner;
  * collection using its ID number and lastly list all books currently in the collection. The data will be stored in a
  * text file and be formatted as follows:<br><br>
  *
- * <p>(ID
- * Number,Title, Author)
+ * <p>
+ * (ID Number,Title, Author)
  * <p>
  * 1,To Kill a Mockingbird, Harper Lee<br>
  * <p>
