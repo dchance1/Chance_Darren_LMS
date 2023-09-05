@@ -1,3 +1,6 @@
+import javax.xml.crypto.Data;
+import java.util.Date;
+
 /**
  * Darren Chance<br>
  * CEN 3024 - Software Development 1<br>
@@ -10,9 +13,28 @@
  */
 
 public class Book {
+    /**
+     * Book is checked out in.
+     */
+    public static final String CHECKED_OUT = "Checked Out";
+    /**
+     * Book is checked in.
+     */
+    public static final String CHECKED_IN = "Checked In";
     private String title;
-    private int BarcodeID;
     private String author;
+    private int BarcodeID;
+    private String status;
+    private Date dueDate = null;
+    private String genre;
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
     public Book(int BarcodeID, String title, String author) {
         super();
@@ -26,6 +48,9 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        this.author = author;
+    }
+    public void setAuthor(String author, String auth) {
         this.author = author;
     }
 
@@ -43,6 +68,20 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setStatus(String status) {
+        if (status != CHECKED_IN && status != CHECKED_OUT) {
+            throw new IllegalArgumentException("setStatus must be" + " one of: CHECKED_IN, or CHECKED_OUT");
+        }
+
+        if (status == CHECKED_IN) {
+            status = CHECKED_IN;
+        }
+
+        if(status == CHECKED_OUT){
+            status = CHECKED_OUT;
+        }
     }
 
 }
