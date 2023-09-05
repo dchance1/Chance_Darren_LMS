@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Main.java<br>
+ * Darren Chance<br> CEN 3024 - Software Development 1<br> September 4, 2023<br> Main.java<br>
  * <p>
  * The class {@code Main} is the main entry point to the program called Library Management System.
  * <p>
