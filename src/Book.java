@@ -103,4 +103,18 @@ public class Book {
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
+
+    public static Book bookTitle(String title) {
+
+        return new Book((Integer) null,title,null,null,null,null);
+
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book that = (Book) o;
+
+        return title.equals(that.title);
+    }
 }
