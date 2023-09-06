@@ -11,7 +11,7 @@ import java.util.Scanner;
  * text file and be formatted as follows:a
  * <br><br>
  *
- * <p>(ID
+ * <p>(IDd
  * Number,Title, Author)
  * <p>
  * 1,To Kill a Mockingbird, Harper Lee<br>

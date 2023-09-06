@@ -167,7 +167,6 @@ public class Database {
         System.out.printf("Book Collection \n(ID Number, Title, Author)\n");
         System.out.printf("-".repeat(40) + "\n");
 
-
         // Display message to user that library is empty
         if (keys.size() <= 0) {
             System.out.printf("-- EMPTY --\n\n" + "Use 'a' menu option to load new books\n" + "from the Library " +
@@ -217,6 +216,17 @@ public class Database {
         return list;
     }
 
+    private boolean isIntegerInput(String input){
+        if(input == null){
+            return false;
+        }
+        try {
+            int n = Integer.parseInt(input);
+        }catch (NumberFormatException e){
+            return false;
+        }
+        return true;
+    }
     /**
      * Method Name: deleteBooks
      * <p>
@@ -228,24 +238,83 @@ public class Database {
      * @throws NumberFormatException if the user input is a non integer type.
      */
     public void deleteBooks() {
-        System.out.printf("Please enter the barcode number that you want to delete: ");
-        Scanner in = new Scanner(System.in);
 
+
+        System.out.printf("Please enter the barcode number or book title that you want to delete: ");
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+        if (isIntegerInput(input)){
+            barcodeID = Integer.valueOf(input);
+            String deletedBook = "";
+            System.out.println();
+
+            if (books.containsKey(barcodeID)) {
+                deletedBook = books.get(barcodeID).getTitle();
+                books.remove(barcodeID);
+
+                keys = new TreeSet<>(books.keySet());
+                List<String> list = new ArrayList<String>();
+
+                // Clear library database file if no books left
+                if (keys.size() <= 0) {
+                    writeFile(list, "Library Database.txt");
+                }
+
+                // Update library database file with books
+                for (Integer i : keys) {
+                    barcodeID = books.get(i).getBarcodeID();
+                    title = books.get(i).getTitle();
+                    author = books.get(i).getAuthor();
+                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
+                    writeFile(list, "Library Database.txt");
+                }
+                String message = "-- Book titled \"" + deletedBook + "\" successfully deleted --";
+                printMessage("-Confirmation Message-", message);
+
+                showBooks();
+            } else {
+                System.out.println("-- Book with id number: " + barcodeID + " does not exist --");
+            }
+        } else {
+            books.containsValue(Book.bookTitle(input));
+
+            System.out.println("Book title "+input+" found");
+
+            int key= 0;
+            String value=input;
+
+            keys = new TreeSet<>(books.keySet());
+            List<String> list = new ArrayList<String>();
+
+            for (Integer i:keys){
+                key = i;
+                if(input.equals(books.get(i).getTitle())){
+                    System.out.println("The key is "+ key);
+                   // books.remove(barcodeID);
+                    break;
+                }
+            }
+        }
+
+        /*
         Boolean isValidID = false;
         // getting input from user and if valid integer isValidID = true, else display
         // error message
         try {
             barcodeID = Integer.valueOf(in.nextLine());
+
             isValidID = true;
             System.out.println();
         } catch (NumberFormatException e) {
             System.out.println("\n-- Invalid input, please enter a valid ID number, returning to the main menu --");
         }
+        */
 
         // If id number is a valid integer and the id key is in the database Hashtable
         // the book is deleted. Then the library database text file is updated to
         // reflect change. Otherwise, book is not deleted and the user is presented with
         // a message advising them what happened.
+        /*
         if (isValidID) {
             String deletedBook = "";
 
@@ -278,6 +347,7 @@ public class Database {
             }
             // hello
         }
+        */
     }
 
     private void printMessage(String messageHeader, String message) {
