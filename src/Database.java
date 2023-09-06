@@ -1,12 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Scanner;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Darren Chance<br> CEN 3024 - Software Development 1<br> August 28, 2023<br> Database.java<br>
@@ -21,10 +18,25 @@ import java.util.TreeSet;
 public class Database {
     private static String title = "";
     private static String author = "";
-    private static int id = 0;
+    private static String genre = "";
+    DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
+    //private static LocalDate date = LocalDate.now();
+    private static int barcodeID;
+    private static LocalDate dueDate = LocalDate.now();
+    private static String status;
+    private static String databaseFileName;
     private static String[] bookParse;
     private static Hashtable<Integer, Book> books;
     private static SortedSet<Integer> keys;
+
+    public static String getDatabaseFileName() {
+        return databaseFileName;
+    }
+
+    public static void setDatabaseFileName(String databaseFileName) {
+        Database.databaseFileName = databaseFileName;
+
+    }
 
     /**
      * Method Name: getBooks
@@ -45,14 +57,39 @@ public class Database {
         for (int i = 0; i < list.size(); i++) {
             bookParse = list.get(i).split(",");
 
-            id = Integer.valueOf(bookParse[0]);
+            barcodeID = Integer.valueOf(bookParse[0]);
             title = bookParse[1];
             author = bookParse[2];
+            genre = bookParse[3];
+            // checked in / out logic
+            if (bookParse[4].toLowerCase().equals(Book.CHECKED_IN.toLowerCase())) {
+                status = Book.CHECKED_IN;
+            } else if (bookParse[4].toLowerCase().equals(Book.CHECKED_OUT.toLowerCase())) {
+                status = Book.CHECKED_OUT;
+            }
 
-            Book book = new Book(id, title, author);
-            books.put(id, book);
+            // Check for due date if book status not checked in
+            if (bookParse[5].equals(Book.CHECKED_IN) || bookParse[5].strip().toLowerCase().equals("null")) {
+                dueDate = null;
+            } else {
+                // Parse text to date if parsable, if not throw exception and advise user of the issue and set due
+                // date to null;
+                try {
+                    dueDate = LocalDate.parse(bookParse[5], dtFormatter);
+                } catch (Exception e) {
+                    //System.out.println("exception caught can't parse \'" + bookParse[5] + "\' to a date");
+                    String message = "Invalid date \'" + bookParse[5] + "\' entered for Barcode Number '" + barcodeID +
+                                     "' date must match 'dd/mm/yyyy'";
+                    printMessage("-Error Message-", message);
+                    dueDate = null;
+                }
+            }
+
+
+            Book book = new Book(barcodeID, title, author, genre, status, dueDate);
+            books.put(barcodeID, book);
         }
-        System.out.println("-- Your collection has been succesfully loaded from the library database text file --\n");
+        System.out.println("-- Your collection has been successfully loaded from the library database text file --\n");
     }
 
     public void addBooks() {
@@ -67,7 +104,7 @@ public class Database {
             s = in.nextLine();
 
             try {
-                id = Integer.valueOf(s);
+                barcodeID = Integer.valueOf(s);
                 isValidInteger = true;
                 // Code below is skipped if input not valid integer
                 s = "c"; // breaks out of loop on receiving valid int input
@@ -84,7 +121,7 @@ public class Database {
         // number does not already exist in the database. This prevents duplicate books or book with the same id key
         // being added
         if (isValidInteger) {
-            if (!books.containsKey(id)) {
+            if (!books.containsKey(barcodeID)) {
                 System.out.printf("Please enter the book title: ");
                 title = in.nextLine();
                 System.out.println();
@@ -93,22 +130,26 @@ public class Database {
                 author = in.nextLine();
                 System.out.println();
                 // add book object to books Hashtable
-                Book book = new Book(id, title, author);
-                books.put(id, book);
+                Book book = new Book(barcodeID, title, author);
+                books.put(barcodeID, book);
+                book.setStatus(Book.CHECKED_OUT);
+
                 // Sort books by id and overwrite library database
                 keys = new TreeSet<>(books.keySet());
                 List<String> list = new ArrayList<String>();
                 // Update library database file with books
                 for (Integer i : keys) {
-                    id = books.get(i).getBarcodeID();
+                    barcodeID = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
-                    list.add(String.format("%d,%s,%s", id, title, author));
+
+                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
                     writeFile(list, "Library Database.txt");
                 }
             } else {
                 System.out.printf(
-                        "-- Book already exists with id number '" + id + "' returning to the main " + "menu" + " --\n");
+                        "-- Book already exists with id number '" + barcodeID + "' returning to the main " + "menu" +
+                        " --\n");
             }
         }
     }
@@ -134,10 +175,19 @@ public class Database {
         } else {
             // Iterate through books Hashtable and display book collection to user
             for (Integer i : keys) {
-                id = books.get(i).getBarcodeID();
+                barcodeID = books.get(i).getBarcodeID();
                 title = books.get(i).getTitle();
                 author = books.get(i).getAuthor();
-                System.out.printf("%d, %s, %s\n", id, title, author);
+                genre = books.get(i).getGenre();
+                status = books.get(i).getStatus();
+                dueDate = books.get(i).getDueDate();
+                String dateFormatted;
+                if (dueDate == null) {
+                    dateFormatted = "null";
+                } else {
+                    dateFormatted = dueDate.toString();
+                }
+                System.out.printf("%d, %s, %s, %s, %s, %s\n", barcodeID, title, author, genre, status, dateFormatted);
             }
         }
 
@@ -185,7 +235,7 @@ public class Database {
         // getting input from user and if valid integer isValidID = true, else display
         // error message
         try {
-            id = Integer.valueOf(in.nextLine());
+            barcodeID = Integer.valueOf(in.nextLine());
             isValidID = true;
             System.out.println();
         } catch (NumberFormatException e) {
@@ -199,9 +249,9 @@ public class Database {
         if (isValidID) {
             String deletedBook = "";
 
-            if (books.containsKey(id)) {
-                deletedBook = books.get(id).getTitle();
-                books.remove(id);
+            if (books.containsKey(barcodeID)) {
+                deletedBook = books.get(barcodeID).getTitle();
+                books.remove(barcodeID);
 
                 keys = new TreeSet<>(books.keySet());
                 List<String> list = new ArrayList<String>();
@@ -213,18 +263,18 @@ public class Database {
 
                 // Update library database file with books
                 for (Integer i : keys) {
-                    id = books.get(i).getBarcodeID();
+                    barcodeID = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
-                    list.add(String.format("%d,%s,%s", id, title, author));
+                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
                     writeFile(list, "Library Database.txt");
                 }
                 String message = "-- Book titled \"" + deletedBook + "\" successfully deleted --";
-                printMessage("-Confirmation Message-",message);
+                printMessage("-Confirmation Message-", message);
 
                 showBooks();
             } else {
-                System.out.println("-- Book with id number: " + id + " does not exist --");
+                System.out.println("-- Book with id number: " + barcodeID + " does not exist --");
             }
             // hello
         }
@@ -235,8 +285,7 @@ public class Database {
         String s = " ".repeat(len) + messageHeader;
         int len2 = message.length() - s.length();
 
-        s = "-".repeat(len) + messageHeader + "-".repeat(len2) + "\n" +
-            message + "\n" + "-".repeat(message.length());
+        s = "-".repeat(len) + messageHeader + "-".repeat(len2) + "\n" + message + "\n" + "-".repeat(message.length());
 
         System.out.println(s + "\n");
     }

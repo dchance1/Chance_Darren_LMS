@@ -1,2 +1,3 @@
-1,To Kill a Mockingbird,Harper Lee
-3,The Great Gatsby,F. Scott Fitzgerald
+1,To Kill a Mockingbird,Harper Lee,Romance,checked in,null
+2,Harry Potter,Darren Chance,Fantasy,checked out,2023/5/2023
+3,The Great Gatsby,F. Scott Fitzgerald,Fantasy,checked out,9/30/2023

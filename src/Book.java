@@ -1,5 +1,4 @@
-import javax.xml.crypto.Data;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Darren Chance<br>
@@ -25,8 +24,17 @@ public class Book {
     private String author;
     private int BarcodeID;
     private String status;
-    private Date dueDate = null;
+    private LocalDate dueDate = null;
     private String genre;
+
+    public Book(int barcodeID,String title, String author,  String genre, String status, LocalDate dueDate) {
+        this.title = title;
+        this.author = author;
+        BarcodeID = barcodeID;
+        this.status = status;
+        this.dueDate = dueDate;
+        this.genre = genre;
+    }
 
     public String getGenre() {
         return genre;
@@ -84,4 +92,15 @@ public class Book {
         }
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
 }
