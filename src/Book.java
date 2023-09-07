@@ -8,7 +8,7 @@ import java.time.LocalDate;
  * <p>
  * <p>
  * The class {@code Book} creates a book and stores the book's details. This allows for easy retrival of details such as
- * title, book id number and author. This class does not contain any methods asside from getters and setters.
+ * title, book id number and author. This class does not contain any methods aside from getters and setters.
  */
 
 public class Book {
@@ -27,7 +27,7 @@ public class Book {
     private LocalDate dueDate = null;
     private String genre;
 
-    public Book(int barcodeID,String title, String author,  String genre, String status, LocalDate dueDate) {
+    public Book(int barcodeID, String title, String author, String genre, String status, LocalDate dueDate) {
         this.title = title;
         this.author = author;
         BarcodeID = barcodeID;
@@ -87,7 +87,7 @@ public class Book {
             status = CHECKED_IN;
         }
 
-        if(status == CHECKED_OUT){
+        if (status == CHECKED_OUT) {
             status = CHECKED_OUT;
         }
     }
@@ -106,7 +106,7 @@ public class Book {
 
     public static Book bookTitle(String title) {
 
-        return new Book((Integer) null,title,null,null,null,null);
+        return new Book(1, title, null, null, null, null);
 
     }
 
