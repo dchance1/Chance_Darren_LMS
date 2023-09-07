@@ -180,13 +180,13 @@ public class Database {
                 genre = books.get(i).getGenre();
                 status = books.get(i).getStatus();
                 dueDate = books.get(i).getDueDate();
-                String dateFormatted;
-                if (dueDate == null) {
-                    dateFormatted = "null";
-                } else {
-                    dateFormatted = dueDate.toString();
+                String formattedDate = "";
+                if (dueDate == null){
+                    formattedDate = "null";
+                }else {
+                    formattedDate = dtFormatter.format(dueDate).toString();
                 }
-                System.out.printf("%d, %s, %s, %s, %s, %s\n", barcodeID, title, author, genre, status, dateFormatted);
+                System.out.printf("%d, %s, %s, %s, %s, %s\n", barcodeID, title, author, genre, status, formattedDate);
             }
         }
 
