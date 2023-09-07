@@ -181,9 +181,9 @@ public class Database {
                 status = books.get(i).getStatus();
                 dueDate = books.get(i).getDueDate();
                 String formattedDate = "";
-                if (dueDate == null){
+                if (dueDate == null) {
                     formattedDate = "null";
-                }else {
+                } else {
                     formattedDate = dtFormatter.format(dueDate).toString();
                 }
                 System.out.printf("%d, %s, %s, %s, %s, %s\n", barcodeID, title, author, genre, status, formattedDate);
@@ -216,17 +216,18 @@ public class Database {
         return list;
     }
 
-    private boolean isIntegerInput(String input){
-        if(input == null){
+    private boolean isIntegerInput(String input) {
+        if (input == null) {
             return false;
         }
         try {
             int n = Integer.parseInt(input);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
+
     /**
      * Method Name: deleteBooks
      * <p>
@@ -243,11 +244,12 @@ public class Database {
         System.out.printf("Please enter the barcode number or book title that you want to delete: ");
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
-        if (isIntegerInput(input)){
+        if (isIntegerInput(input)) {
             barcodeID = Integer.valueOf(input);
             String deletedBook = "";
             System.out.println();
 
+            String message;
             if (books.containsKey(barcodeID)) {
                 deletedBook = books.get(barcodeID).getTitle();
                 books.remove(barcodeID);
@@ -268,29 +270,33 @@ public class Database {
                     list.add(String.format("%d,%s,%s", barcodeID, title, author));
                     writeFile(list, "Library Database.txt");
                 }
-                String message = "-- Book titled \"" + deletedBook + "\" successfully deleted --";
+                message = "Book titled \'" + deletedBook + "\' successfully deleted";
                 printMessage("-Confirmation Message-", message);
 
                 showBooks();
             } else {
-                System.out.println("-- Book with id number: " + barcodeID + " does not exist --");
+                message = "Book with Barcode Number \'" + barcodeID + "\' does not exist";
+                printMessage("-Error Message-", message);
             }
         } else {
-            if(books.containsValue(Book.bookTitle(input))){
-                System.out.println("Book title "+input+" found");
 
-                int key= 0;
-                String value=input;
+            String message;
+            if (books.containsValue(Book.bookTitle(input))) {
+
+                System.out.println("Book title " + input + " found");
+
+                int key = 0;
+                String value = input;
 
                 keys = new TreeSet<>(books.keySet());
                 List<String> list = new ArrayList<String>();
 
 
                 // Finds the key and remove book
-                for (Integer i:keys){
+                for (Integer i : keys) {
                     key = i;
-                    if(input.equals(books.get(i).getTitle())){
-                        System.out.println("The key is "+ key);
+                    if (input.equals(books.get(i).getTitle())) {
+                        System.out.println("The key is " + key);
                         books.remove(key);
                         break;
                     }
@@ -309,21 +315,24 @@ public class Database {
                     status = books.get(i).getStatus();
                     dueDate = books.get(i).getDueDate();
                     String formattedDate = "";
-                    if (dueDate == null){
+                    if (dueDate == null) {
                         formattedDate = "null";
-                    }else {
+                    } else {
                         formattedDate = dtFormatter.format(dueDate).toString();
                     }
 
-                    list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author,genre,status,formattedDate));
+                    list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                            formattedDate));
                     writeFile(list, "Library Database.txt");
                 }
-                String message = "-- Book titled \"" + input + "\" successfully deleted --";
+                message = "Book titled \'" + input + "\' successfully deleted";
                 printMessage("-Confirmation Message-", message);
 
+                showBooks();
+            } else {
+                message = "Book with Title \'" + input + "\' does not exist";
+                printMessage("-Error Message-", message);
             }
-
-
         }
 
         /*
