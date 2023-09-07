@@ -276,9 +276,12 @@ public class Database {
                 System.out.println("-- Book with id number: " + barcodeID + " does not exist --");
             }
         } else {
-            books.containsValue(Book.bookTitle(input));
+            if(books.containsValue(Book.bookTitle(input))){
+                System.out.println("Book title "+input+" found");
+            }
 
-            System.out.println("Book title "+input+" found");
+
+
 
             int key= 0;
             String value=input;
@@ -290,7 +293,9 @@ public class Database {
                 key = i;
                 if(input.equals(books.get(i).getTitle())){
                     System.out.println("The key is "+ key);
-                   // books.remove(barcodeID);
+                    //books.remove(key);
+
+
                     break;
                 }
             }
