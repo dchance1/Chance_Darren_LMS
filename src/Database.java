@@ -278,27 +278,52 @@ public class Database {
         } else {
             if(books.containsValue(Book.bookTitle(input))){
                 System.out.println("Book title "+input+" found");
-            }
+
+                int key= 0;
+                String value=input;
+
+                keys = new TreeSet<>(books.keySet());
+                List<String> list = new ArrayList<String>();
 
 
-
-
-            int key= 0;
-            String value=input;
-
-            keys = new TreeSet<>(books.keySet());
-            List<String> list = new ArrayList<String>();
-
-            for (Integer i:keys){
-                key = i;
-                if(input.equals(books.get(i).getTitle())){
-                    System.out.println("The key is "+ key);
-                    //books.remove(key);
-
-
-                    break;
+                // Finds the key and remove book
+                for (Integer i:keys){
+                    key = i;
+                    if(input.equals(books.get(i).getTitle())){
+                        System.out.println("The key is "+ key);
+                        books.remove(key);
+                        break;
+                    }
                 }
+                // Clear library database file if no books left
+                if (keys.size() <= 0) {
+                    writeFile(list, "Library Database.txt");
+                }
+                keys = new TreeSet<>(books.keySet());
+                // Update library database file with books
+                for (Integer i : keys) {
+                    barcodeID = books.get(i).getBarcodeID();
+                    title = books.get(i).getTitle();
+                    author = books.get(i).getAuthor();
+                    genre = books.get(i).getGenre();
+                    status = books.get(i).getStatus();
+                    dueDate = books.get(i).getDueDate();
+                    String formattedDate = "";
+                    if (dueDate == null){
+                        formattedDate = "null";
+                    }else {
+                        formattedDate = dtFormatter.format(dueDate).toString();
+                    }
+
+                    list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author,genre,status,formattedDate));
+                    writeFile(list, "Library Database.txt");
+                }
+                String message = "-- Book titled \"" + input + "\" successfully deleted --";
+                printMessage("-Confirmation Message-", message);
+
             }
+
+
         }
 
         /*
