@@ -193,10 +193,11 @@ public class Database {
         System.out.printf("-".repeat(40) + "\n");
     }
 
-    public void checkInBooks(){
+    public void checkInBooks() {
 
     }
-    public void checkOutBooks(){
+
+    public void checkOutBooks() {
         System.out.printf("Please enter the title of the book want to check out: ");
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
@@ -215,42 +216,55 @@ public class Database {
             // Finds the key and checks out book, setting due date 4 weeks from today
             for (Integer i : keys) {
                 key = i;
+                // checking for title matching in collection
                 if (input.equals(books.get(i).getTitle())) {
-                    System.out.println("The key is " + key);
-                    // Adding 4 weeks to current date and setting to due date
-                    books.get(key).setStatus(Book.CHECKED_OUT);
-                    books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
-                    dueDate = books.get(key).getDueDate();
+                    if (books.get(key).getStatus().equals(Book.CHECKED_IN)) {
+                        System.out.println("The key is " + key);
+                        // Adding 4 weeks to current date and setting to due date
+                        books.get(key).setStatus(Book.CHECKED_OUT);
+                        books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
+                        dueDate = books.get(key).getDueDate();
 
-                    message = "Book titled \'" + input + "\' checked out due date set to " + dtFormatter.format(dueDate);
-                    printMessage("-Confirmation Message-", message);
-                    break;
+                        message = "Book titled \'" + input + "\' checked out and due date set to " +
+                                  dtFormatter.format(dueDate);
+                        printMessage("-Confirmation Message-", message);
+
+                        keys = new TreeSet<>(books.keySet());
+                        // Update library database file with books
+                        for (Integer book : keys) {
+                            barcodeID = books.get(book).getBarcodeID();
+                            title = books.get(book).getTitle();
+                            author = books.get(book).getAuthor();
+                            genre = books.get(book).getGenre();
+                            status = books.get(book).getStatus();
+                            dueDate = books.get(book).getDueDate();
+                            String formattedDate = "";
+                            if (dueDate == null) {
+                                formattedDate = "null";
+                            } else {
+                                formattedDate = dtFormatter.format(dueDate).toString();
+                            }
+
+                            list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                                    formattedDate));
+                            writeFile(list, "Library Database.txt");
+                        }
+
+
+                        showBooks();
+
+
+                        break;
+
+                    } else if (books.get(key).getStatus().equals(Book.CHECKED_OUT)) {
+                        message = "Book titled \'" + input + "\' is already checked out";
+                        printMessage("-Error Message-", message);
+                    }
+
                 }
             }
 
-            keys = new TreeSet<>(books.keySet());
-            // Update library database file with books
-            for (Integer i : keys) {
-                barcodeID = books.get(i).getBarcodeID();
-                title = books.get(i).getTitle();
-                author = books.get(i).getAuthor();
-                genre = books.get(i).getGenre();
-                status = books.get(i).getStatus();
-                dueDate = books.get(i).getDueDate();
-                String formattedDate = "";
-                if (dueDate == null) {
-                    formattedDate = "null";
-                } else {
-                    formattedDate = dtFormatter.format(dueDate).toString();
-                }
 
-                list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
-                        formattedDate));
-                writeFile(list, "Library Database.txt");
-            }
-
-
-            showBooks();
         } else {
             message = "Book with Title \'" + input + "\' does not exist";
             printMessage("-Error Message-", message);
@@ -313,7 +327,7 @@ public class Database {
         if (isIntegerInput(input)) {
             barcodeID = Integer.valueOf(input);
             String deletedBook = "";
-            System.out.println();
+
 
             String message;
             if (books.containsKey(barcodeID)) {
@@ -345,6 +359,7 @@ public class Database {
                 printMessage("-Error Message-", message);
             }
         } else {
+
 
             String message;
             if (books.containsValue(Book.bookTitle(input))) {
@@ -400,62 +415,13 @@ public class Database {
                 printMessage("-Error Message-", message);
             }
         }
-
-        /*
-        Boolean isValidID = false;
-        // getting input from user and if valid integer isValidID = true, else display
-        // error message
-        try {
-            barcodeID = Integer.valueOf(in.nextLine());
-
-            isValidID = true;
-            System.out.println();
-        } catch (NumberFormatException e) {
-            System.out.println("\n-- Invalid input, please enter a valid ID number, returning to the main menu --");
-        }
-        */
-
-        // If id number is a valid integer and the id key is in the database Hashtable
-        // the book is deleted. Then the library database text file is updated to
-        // reflect change. Otherwise, book is not deleted and the user is presented with
-        // a message advising them what happened.
-        /*
-        if (isValidID) {
-            String deletedBook = "";
-
-            if (books.containsKey(barcodeID)) {
-                deletedBook = books.get(barcodeID).getTitle();
-                books.remove(barcodeID);
-
-                keys = new TreeSet<>(books.keySet());
-                List<String> list = new ArrayList<String>();
-
-                // Clear library database file if no books left
-                if (keys.size() <= 0) {
-                    writeFile(list, "Library Database.txt");
-                }
-
-                // Update library database file with books
-                for (Integer i : keys) {
-                    barcodeID = books.get(i).getBarcodeID();
-                    title = books.get(i).getTitle();
-                    author = books.get(i).getAuthor();
-                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
-                    writeFile(list, "Library Database.txt");
-                }
-                String message = "-- Book titled \"" + deletedBook + "\" successfully deleted --";
-                printMessage("-Confirmation Message-", message);
-
-                showBooks();
-            } else {
-                System.out.println("-- Book with id number: " + barcodeID + " does not exist --");
-            }
-            // hello
-        }
-        */
     }
 
+    //TODO
+    //  -Add comments
+    //NEED TO UPDATE
     private void printMessage(String messageHeader, String message) {
+        System.out.println();
         int len = (message.length() - messageHeader.length()) / 2;
         String s = " ".repeat(len) + messageHeader;
         int len2 = message.length() - s.length();
