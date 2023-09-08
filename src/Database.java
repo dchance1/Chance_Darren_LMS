@@ -222,7 +222,7 @@ public class Database {
                     books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
                     dueDate = books.get(key).getDueDate();
 
-                    message = "Book titled \'" + input + "\' checked out due date " + dtFormatter.format(dueDate);
+                    message = "Book titled \'" + input + "\' checked out due date set to " + dtFormatter.format(dueDate);
                     printMessage("-Confirmation Message-", message);
                     break;
                 }
