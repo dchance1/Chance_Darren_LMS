@@ -53,10 +53,10 @@ public class Main {
                       "\n'a' - to add a book to the collection" +
                       "\n'q' - to end application\n" +
                       "-".repeat(40);
-        System.out.printf(menu);
+        System.out.println(menu);
 
         while (!s.equals("q")) {
-            System.out.printf("\nPlease type the letter associated with the action you would like to perform: ");
+            System.out.printf("Please type the letter associated with the action you would like to perform: ");
             s = in.nextLine().toLowerCase();
             System.out.println();
 
