@@ -43,11 +43,16 @@ public class Main {
 
 
         // Printing menu options to console
-        String menu = "-".repeat(40) + "\nApplication Menu\n" + "-".repeat(40) +
+        String menu = "-".repeat(40) +
+                      "\nApplication Menu\n" +
+                      "-".repeat(40) +
                       "\n'v' - to display book collection" +
                       "\n'd' - to remove a book from collection" +
-                      "\n'a' - to add a book to the " + "collection" +
-                      "\n'q' - to end application\n" + "-".repeat(40);
+                      "\n'i' - to check in a book" +
+                      "\n'o' - to check out a book" +
+                      "\n'a' - to add a book to the collection" +
+                      "\n'q' - to end application\n" +
+                      "-".repeat(40);
         System.out.printf(menu);
 
         while (!s.equals("q")) {
@@ -64,6 +69,12 @@ public class Main {
                     break;
                 case "a":
                     database.addBooks();
+                    break;
+                case "i":
+                    database.checkInBooks();
+                    break;
+                case "o":
+                    database.checkOutBooks();
                     break;
                 case "q":
                     System.out.println("Program ended!");
