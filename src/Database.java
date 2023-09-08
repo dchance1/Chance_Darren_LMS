@@ -223,7 +223,6 @@ public class Database {
                         // Adding 4 weeks to current date and setting to due date
                         books.get(key).setStatus(Book.CHECKED_OUT);
                         books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
-                        dueDate = books.get(key).getDueDate();
 
                         message = "Book titled \'" + input + "\' checked out and due date set to " +
                                   dtFormatter.format(dueDate);
@@ -250,10 +249,7 @@ public class Database {
                             writeFile(list, "Library Database.txt");
                         }
 
-
                         showBooks();
-
-
                         break;
 
                     } else if (books.get(key).getStatus().equals(Book.CHECKED_OUT)) {

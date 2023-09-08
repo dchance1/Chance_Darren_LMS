@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public class Book {
     /**
-     * Book is checked out in.
+     * Book is checked out.
      */
     public static final String CHECKED_OUT = "Checked Out";
     /**
@@ -84,13 +84,14 @@ public class Book {
         }
 
         if (status == CHECKED_IN) {
-            status = CHECKED_IN;
+            this.status = CHECKED_IN;
         }
 
         if (status == CHECKED_OUT) {
-            status = CHECKED_OUT;
+            this.status = CHECKED_OUT;
         }
     }
+
 
     public String getStatus() {
         return status;
