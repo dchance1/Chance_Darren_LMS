@@ -193,6 +193,13 @@ public class Database {
         System.out.printf("-".repeat(40) + "\n");
     }
 
+    public void checkInBooks(){
+
+    }
+    public void checkOutBooks(){
+
+    }
+
     /**
      * Method Name: readFile
      * <p>
