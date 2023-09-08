@@ -197,6 +197,65 @@ public class Database {
 
     }
     public void checkOutBooks(){
+        System.out.printf("Please enter the title of the book want to check out: ");
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+
+        //check if the book is in the system
+        String message;
+        if (books.containsValue(Book.bookTitle(input))) {
+
+            int key = 0;
+            String value = input;
+
+            keys = new TreeSet<>(books.keySet());
+            List<String> list = new ArrayList<String>();
+
+
+            // Finds the key and checks out book, setting due date 4 weeks from today
+            for (Integer i : keys) {
+                key = i;
+                if (input.equals(books.get(i).getTitle())) {
+                    System.out.println("The key is " + key);
+                    // Adding 4 weeks to current date and setting to due date
+                    books.get(key).setStatus(Book.CHECKED_OUT);
+                    books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
+                    dueDate = books.get(key).getDueDate();
+
+                    message = "Book titled \'" + input + "\' checked out due date " + dtFormatter.format(dueDate);
+                    printMessage("-Confirmation Message-", message);
+                    break;
+                }
+            }
+
+            keys = new TreeSet<>(books.keySet());
+            // Update library database file with books
+            for (Integer i : keys) {
+                barcodeID = books.get(i).getBarcodeID();
+                title = books.get(i).getTitle();
+                author = books.get(i).getAuthor();
+                genre = books.get(i).getGenre();
+                status = books.get(i).getStatus();
+                dueDate = books.get(i).getDueDate();
+                String formattedDate = "";
+                if (dueDate == null) {
+                    formattedDate = "null";
+                } else {
+                    formattedDate = dtFormatter.format(dueDate).toString();
+                }
+
+                list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                        formattedDate));
+                writeFile(list, "Library Database.txt");
+            }
+
+
+            showBooks();
+        } else {
+            message = "Book with Title \'" + input + "\' does not exist";
+            printMessage("-Error Message-", message);
+        }
+
 
     }
 
