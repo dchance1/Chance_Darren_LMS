@@ -28,13 +28,11 @@ public class Database {
     private static String[] bookParse;
     private static Hashtable<Integer, Book> books;
     private static SortedSet<Integer> keys;
+    private String fileName;
 
-    public static String getDatabaseFileName() {
-        return databaseFileName;
-    }
 
-    public static void setDatabaseFileName(String databaseFileName) {
-        Database.databaseFileName = databaseFileName;
+    public void setDatabaseFileName(String databaseFileName) {
+        this.databaseFileName = databaseFileName;
 
     }
 
@@ -48,7 +46,10 @@ public class Database {
      */
     public void getBooks() {
         books = new Hashtable<Integer, Book>();
-        List<String> list = Database.readFile("Library Database.txt");
+        //List<String> list = Database.readFile("Library Database.txt");
+        System.out.println("File name is " + fileName);
+        List<String> list = readFile(this.getFileName());
+
 
         // Iterate through list of books in the library database text file. Each line of
         // text containing book details is split by ',' and values are then added to the
@@ -260,7 +261,6 @@ public class Database {
                 }
             }
 
-
         } else {
             message = "Book with Title \'" + input + "\' does not exist";
             printMessage("-Error Message-", message);
@@ -278,18 +278,53 @@ public class Database {
      * @param file A string specifying the file name to open for reading
      * @return a list of strings separated by new lines from the read text file
      */
-    private static List<String> readFile(String file) {
+    private List<String> readFile(String file) {
         List<String> list = new ArrayList<String>();
         File tempFile = new File(file);
+        Boolean fileExists = false;
+        fileExists = tempFile.exists();
+        String s = "";
+        if (fileExists == true) {
+            s = file;
+            setFileName(s);
+            tempFile = new File(s);
+
+        } else {
+            while (!fileExists) {
+
+                System.out.println("Try again: ");
+                Scanner in = new Scanner(System.in);
+                s = in.nextLine();
+                tempFile = new File(s);
+                fileExists = tempFile.exists();
+            }
+            setFileName(s);
+        }
+
+
         try {
+
             Scanner input = new Scanner(tempFile);
+
             while (input.hasNextLine()) {
                 list.add(input.nextLine());
+
             }
+            return list;
         } catch (FileNotFoundException e1) {
-            System.out.println("You have an error: " + e1);
+
+            String message = "The system cannot find the file specified";
+            printMessage("-Error Message-", message);
+            //System.out.println("You have an error: " + e1);
+
+            //System.exit(1);
+
         }
+
+
         return list;
+
+
     }
 
     private boolean isIntegerInput(String input) {
@@ -355,7 +390,6 @@ public class Database {
                 printMessage("-Error Message-", message);
             }
         } else {
-
 
             String message;
             if (books.containsValue(Book.bookTitle(input))) {
@@ -425,6 +459,8 @@ public class Database {
         s = "-".repeat(len) + messageHeader + "-".repeat(len2) + "\n" + message + "\n" + "-".repeat(message.length());
 
         System.out.println(s + "\n");
+
+
     }
 
     /**
@@ -439,6 +475,7 @@ public class Database {
      */
     public static void writeFile(List<String> list, String file) {
         File tempFile = new File(file);
+
         try {
             PrintWriter output = new PrintWriter(tempFile);
             for (String e : list) {
@@ -450,4 +487,19 @@ public class Database {
         }
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+
+        this.fileName = fileName;
+    }
+
+
+    public void chooseFile() {
+        Scanner in = new Scanner(System.in);
+        readFile(in.nextLine());
+
+    }
 }

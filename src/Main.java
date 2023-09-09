@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 /**
  * Darren Chance<br> CEN 3024 - Software Development 1<br> September 4, 2023<br> Main.java<br>
  * <p>
@@ -32,13 +34,19 @@ public class Main {
         Scanner in = new Scanner(System.in);
         String s = "";
 
+
+
         // database object created to store books at runtime and give access to methods to interact, or make changes
         // to the
         // database object
         Database database = new Database();
-
+        System.out.print("Enter the database file name: ");
+        //database.setFileName(in.nextLine());
+        database.chooseFile();
+        System.out.println(database.getFileName());
         // Loading any books currently in the database on program launch
         database.getBooks();
+
 
 
 
