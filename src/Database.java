@@ -46,10 +46,7 @@ public class Database {
      */
     public void getBooks() {
         books = new Hashtable<Integer, Book>();
-        //List<String> list = Database.readFile("Library Database.txt");
-        System.out.println("File name is " + fileName);
         List<String> list = readFile(this.getFileName());
-
 
         // Iterate through list of books in the library database text file. Each line of
         // text containing book details is split by ',' and values are then added to the
@@ -195,9 +192,62 @@ public class Database {
     }
 
     public void checkInBooks() {
+        System.out.printf("Please enter the title of the book want to check in: ");
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+        String message;
+        if (books.containsValue(Book.bookTitle(input))) {
+            int key = 0;
+            keys = new TreeSet<>(books.keySet());
+            List<String> list = new ArrayList<String>();
 
+
+            // Finds the key and checks out book, setting due date 4 weeks from today
+            for (Integer i : keys) {
+                key = i;
+                // checking for title matching in collection
+                if (input.equals(books.get(i).getTitle())) {
+                    if (books.get(key).getStatus().equals(Book.CHECKED_OUT)) {
+                        System.out.println("The key is " + key);
+                        // Setting book status to checked in and due date to null
+                        books.get(key).setStatus(Book.CHECKED_IN);
+                        books.get(key).setDueDate(null);
+
+                        message = "Book titled \'" + input + "\' checked in";
+                        printMessage("-Confirmation Message-", message);
+
+                        // Update library database file with books
+                        keys = new TreeSet<>(books.keySet());
+                        for (Integer book : keys) {
+                            barcodeID = books.get(book).getBarcodeID();
+                            title = books.get(book).getTitle();
+                            author = books.get(book).getAuthor();
+                            genre = books.get(book).getGenre();
+                            status = books.get(book).getStatus();
+                            dueDate = books.get(book).getDueDate();
+                            String formattedDate = "";
+                            if (dueDate == null) {
+                                formattedDate = "null";
+                            } else {
+                                formattedDate = dtFormatter.format(dueDate).toString();
+                            }
+                            list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                                    formattedDate));
+                            writeFile(list, "Library Database.txt");
+                        }
+                        break;
+                    } else if (books.get(key).getStatus().equals(Book.CHECKED_IN)) {
+                        message = "Book titled \'" + input + "\' is already checked in";
+                        printMessage("-Error Message-", message);
+                    }
+
+                }
+            }
+        } else {
+            message = "Book with Title \'" + input + "\' does not exist";
+            printMessage("-Error Message-", message);
+        }
     }
-
     public void checkOutBooks() {
         System.out.printf("Please enter the title of the book want to check out: ");
         Scanner in = new Scanner(System.in);
@@ -208,7 +258,6 @@ public class Database {
         if (books.containsValue(Book.bookTitle(input))) {
 
             int key = 0;
-            String value = input;
 
             keys = new TreeSet<>(books.keySet());
             List<String> list = new ArrayList<String>();
@@ -226,7 +275,7 @@ public class Database {
                         books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
 
                         message = "Book titled \'" + input + "\' checked out and due date set to " +
-                                  dtFormatter.format(dueDate);
+                                  dtFormatter.format(books.get(key).getDueDate());
                         printMessage("-Confirmation Message-", message);
 
                         keys = new TreeSet<>(books.keySet());
@@ -293,7 +342,7 @@ public class Database {
         } else {
             while (!fileExists) {
                 count++;
-                if (count >= 3){
+                if (count >= 3) {
                     System.exit(1);
                 }
                 String message = "The file name entered cannot be found please try again";

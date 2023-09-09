@@ -33,23 +33,16 @@ public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String s = "";
-
-
-
         // database object created to store books at runtime and give access to methods to interact, or make changes
         // to the
         // database object
         Database database = new Database();
+        // Asking user for file name of databases text file to load from
         System.out.print("Enter the database file name: ");
-        //database.setFileName(in.nextLine());
         database.chooseFile();
-        System.out.println(database.getFileName());
         // Loading any books currently in the database on program launch
+        System.out.println();
         database.getBooks();
-
-
-
-
         // Printing menu options to console
         String menu = "-".repeat(40) +
                       "\nApplication Menu\n" +
