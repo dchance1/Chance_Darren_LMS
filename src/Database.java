@@ -284,6 +284,7 @@ public class Database {
         Boolean fileExists = false;
         fileExists = tempFile.exists();
         String s = "";
+        int count = 0;
         if (fileExists == true) {
             s = file;
             setFileName(s);
@@ -291,8 +292,13 @@ public class Database {
 
         } else {
             while (!fileExists) {
-
-                System.out.println("Try again: ");
+                count++;
+                if (count >= 3){
+                    System.exit(1);
+                }
+                String message = "The file name entered cannot be found please try again";
+                printMessage("-Error Message-", message);
+                System.out.print("Enter the database file name: ");
                 Scanner in = new Scanner(System.in);
                 s = in.nextLine();
                 tempFile = new File(s);
@@ -300,31 +306,17 @@ public class Database {
             }
             setFileName(s);
         }
-
-
         try {
-
             Scanner input = new Scanner(tempFile);
-
             while (input.hasNextLine()) {
                 list.add(input.nextLine());
-
             }
             return list;
         } catch (FileNotFoundException e1) {
-
             String message = "The system cannot find the file specified";
             printMessage("-Error Message-", message);
-            //System.out.println("You have an error: " + e1);
-
-            //System.exit(1);
-
         }
-
-
         return list;
-
-
     }
 
     private boolean isIntegerInput(String input) {
