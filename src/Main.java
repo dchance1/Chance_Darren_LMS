@@ -9,12 +9,13 @@ import static java.lang.System.exit;
  * <p>
  * Library Management System is a console-based application. This application is developed to help users maintain a
  * collection of books. The user will have the ability to add new books to the collection, remove a book from the
- * collection using its ID number and lastly list all books currently in the collection. The data will be stored in a
- * text file and be formatted as follows:a
+ * collection using its ID number or Title, check books in and out, and lastly list all books currently in the
+ * collection. The data will be stored in a
+ * text file and be formatted as follows:
  * <br><br>
  *
- * <p>(IDd
- * Number,Title, Author)
+ * <p>
+ * (ID Number,Title, Author)
  * <p>
  * 1,To Kill a Mockingbird, Harper Lee<br>
  * <p>
@@ -23,9 +24,9 @@ import static java.lang.System.exit;
  * 3,The Great Gatsby,F. Scott Fitzgerald<br ><br>
  *
  * <p>
- * This class presents the user with a menu of the following 4 options: display book collection, remove a book from
- * collection, add a book to the collection, end application. This call will make calls to the classes Databse.java and
- * Book.java to store data and access necessary fuctions for viewing and manipulation of data.
+ * This class presents the user with a menu of the following 6 options: display book collection, remove a book from
+ * collection, add a book to the collection, end application, check out book, check in book. This call will make calls to the classes Databse.java and
+ * Book.java to store data and access necessary functions for viewing and manipulation of data.
  * <p>
  */
 public class Main {
@@ -55,7 +56,7 @@ public class Main {
                       "\n'q' - to end application\n" +
                       "-".repeat(40);
         System.out.println(menu);
-
+        // Gets user choice from input and runs associated method
         while (!s.equals("q")) {
             System.out.printf("Please type the letter associated with the action you would like to perform: ");
             s = in.nextLine().toLowerCase();

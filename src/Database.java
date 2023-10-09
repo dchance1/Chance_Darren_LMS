@@ -30,7 +30,13 @@ public class Database {
     private static SortedSet<Integer> keys;
     private String fileName;
 
-
+    /**
+     * Method Name: setDatabaseFileName
+     * <p>
+     * This method set the database file name to be used by database object.
+     *
+     * @return none
+     */
     public void setDatabaseFileName(String databaseFileName) {
         this.databaseFileName = databaseFileName;
 
@@ -75,21 +81,26 @@ public class Database {
                 try {
                     dueDate = LocalDate.parse(bookParse[5], dtFormatter);
                 } catch (Exception e) {
-                    //System.out.println("exception caught can't parse \'" + bookParse[5] + "\' to a date");
                     String message = "Invalid date \'" + bookParse[5] + "\' entered for Barcode Number '" + barcodeID +
                                      "' date must match 'dd/mm/yyyy'";
                     printMessage("-Error Message-", message);
                     dueDate = null;
                 }
             }
-
-
             Book book = new Book(barcodeID, title, author, genre, status, dueDate);
             books.put(barcodeID, book);
         }
         System.out.println("-- Your collection has been successfully loaded from the library database text file --\n");
     }
 
+    /**
+     * Method Name: addBooks
+     * <p>
+     * This method create new books from user input. This method has built in checking for duplicates, and errors in
+     * user input.
+     *
+     * @return none
+     */
     public void addBooks() {
         Scanner in = new Scanner(System.in);
         String s = "";
@@ -191,6 +202,13 @@ public class Database {
         System.out.printf("-".repeat(40) + "\n");
     }
 
+    /**
+     * Method Name: checkInBooks
+     * <p>
+     * This method checks a book in. The status it updated to checked in. The due date is updated to null.
+     *
+     * @return none
+     */
     public void checkInBooks() {
         System.out.printf("Please enter the title of the book want to check in: ");
         Scanner in = new Scanner(System.in);
@@ -248,6 +266,14 @@ public class Database {
             printMessage("-Error Message-", message);
         }
     }
+
+    /**
+     * Method Name: checkOutBooks
+     * <p>
+     * This method checks a book out. The status it updated to checked out. The due date is updated to 4 weeks out.
+     *
+     * @return none
+     */
     public void checkOutBooks() {
         System.out.printf("Please enter the title of the book want to check out: ");
         Scanner in = new Scanner(System.in);
@@ -368,6 +394,15 @@ public class Database {
         return list;
     }
 
+    /**
+     * Method Name: writeFile
+     * <p>
+     * This method checks the if the text is a valid integer or not. It will return true only if text contains a
+     * valid integer.
+     *
+     * @param input A text to be checked if it is a valid number or not
+     * @return True if input is a valid integer and false if it is not
+     */
     private boolean isIntegerInput(String input) {
         if (input == null) {
             return false;
@@ -488,9 +523,16 @@ public class Database {
         }
     }
 
-    //TODO
-    //  -Add comments
-    //NEED TO UPDATE
+    /**
+     * Method Name: printMessage
+     * <p>
+     * This method displays a message to the console in a neat format. It requires text input to use as the message
+     * header and message body. The message will be display in a consistent format.
+     *
+     * @param messageHeader The text to display as your message header
+     * @param message       The text to display in your message body
+     * @return nond
+     */
     private void printMessage(String messageHeader, String message) {
         System.out.println();
         int len = (message.length() - messageHeader.length()) / 2;
@@ -538,6 +580,13 @@ public class Database {
     }
 
 
+    /**
+     * Method Name: chooseFile
+     * <p>
+     * This method gets text user input and attempts to read the file.
+     *
+     * @return none
+     */
     public void chooseFile() {
         Scanner in = new Scanner(System.in);
         readFile(in.nextLine());
