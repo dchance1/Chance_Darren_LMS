@@ -51,6 +51,14 @@ public class Book {
         this.title = title;
     }
 
+    public Book(int BarcodeID, String title, String author, String genre) {
+        super();
+        this.author = author;
+        this.BarcodeID = BarcodeID;
+        this.title = title;
+        this.genre = genre;
+    }
+
     public String getAuthor() {
         return author;
     }

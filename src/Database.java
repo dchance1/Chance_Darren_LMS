@@ -138,21 +138,35 @@ public class Database {
                 System.out.printf("Please enter the book author: ");
                 author = in.nextLine();
                 System.out.println();
+                // Get book genre from user input
+                System.out.printf("Please enter the book genre: ");
+                author = in.nextLine();
+                System.out.println();
                 // add book object to books Hashtable
-                Book book = new Book(barcodeID, title, author);
+                Book book = new Book(barcodeID, title, author, genre);
                 books.put(barcodeID, book);
-                book.setStatus(Book.CHECKED_OUT);
+                book.setStatus(Book.CHECKED_IN);
 
                 // Sort books by id and overwrite library database
                 keys = new TreeSet<>(books.keySet());
                 List<String> list = new ArrayList<String>();
                 // Update library database file with books
+                keys = new TreeSet<>(books.keySet());
                 for (Integer i : keys) {
                     barcodeID = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
-
-                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
+                    genre = books.get(i).getGenre();
+                    status = books.get(i).getStatus();
+                    dueDate = books.get(i).getDueDate();
+                    String formattedDate = "";
+                    if (dueDate == null) {
+                        formattedDate = "null";
+                    } else {
+                        formattedDate = dtFormatter.format(dueDate).toString();
+                    }
+                    list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                            formattedDate));
                     writeFile(list, "Library Database.txt");
                 }
             } else {
