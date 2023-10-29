@@ -16,18 +16,18 @@ import java.util.*;
  */
 
 public class Database {
-    private static String title = "";
-    private static String author = "";
-    private static String genre = "";
+    private String title = "";
+    private String author = "";
+    private String genre = "";
     DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
     //private static LocalDate date = LocalDate.now();
-    private static int barcodeID;
-    private static LocalDate dueDate = LocalDate.now();
-    private static String status;
-    private static String databaseFileName;
-    private static String[] bookParse;
-    private static Hashtable<Integer, Book> books;
-    private static SortedSet<Integer> keys;
+    private int barcodeID;
+    private LocalDate dueDate = LocalDate.now();
+    private String status;
+    private String databaseFileName;
+    private String[] bookParse;
+    private Hashtable<Integer, Book> books;
+    private SortedSet<Integer> keys;
     private String fileName;
 
     /**
@@ -40,6 +40,10 @@ public class Database {
     public void setDatabaseFileName(String databaseFileName) {
         this.databaseFileName = databaseFileName;
 
+    }
+    public Hashtable<Integer, Book> getbooks(){
+
+        return books;
     }
 
     /**
@@ -140,7 +144,7 @@ public class Database {
                 System.out.println();
                 // Get book genre from user input
                 System.out.printf("Please enter the book genre: ");
-                author = in.nextLine();
+                genre = in.nextLine();
                 System.out.println();
                 // add book object to books Hashtable
                 Book book = new Book(barcodeID, title, author, genre);
