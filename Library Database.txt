@@ -1,3 +1,3 @@
-1,To Kill a Mockingbird,Harper Lee,Romance,Checked In,null
-2,Harry Potter,Darren Chance,Fantasy,Checked Out,9/15/2023
-3,The Great Gatsby,F. Scott Fitzgerald,Fantasy,Checked In,null
+3,The Great Gatsby,F. Scott Fitzgerald,Fantasy,Checked Out,11/30/2023
+4,Don't Be a Menace,Spike Lee,Action,Checked In,null
+88,Holes,James Cameron,Action,Checked In,null

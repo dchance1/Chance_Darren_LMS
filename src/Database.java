@@ -29,6 +29,9 @@ public class Database {
     private Hashtable<Integer, Book> books;
     private SortedSet<Integer> keys;
     private String fileName;
+    private MainFrame mainFrame;
+
+
 
     /**
      * Method Name: setDatabaseFileName
@@ -41,10 +44,7 @@ public class Database {
         this.databaseFileName = databaseFileName;
 
     }
-    public Hashtable<Integer, Book> getbooks(){
 
-        return books;
-    }
 
     /**
      * Method Name: getBooks
@@ -95,6 +95,7 @@ public class Database {
             books.put(barcodeID, book);
         }
         System.out.println("-- Your collection has been successfully loaded from the library database text file --\n");
+
     }
 
     /**
@@ -188,7 +189,7 @@ public class Database {
      *
      * @return none
      */
-    public void showBooks() {
+    public Hashtable<Integer, Book> showBooks() {
         keys = new TreeSet<>(books.keySet());
         System.out.printf("-".repeat(40) + "\n");
         System.out.printf("Book Collection \n(ID Number, Title, Author)\n");
@@ -218,6 +219,7 @@ public class Database {
         }
 
         System.out.printf("-".repeat(40) + "\n");
+        return books;
     }
 
     /**
@@ -227,10 +229,10 @@ public class Database {
      *
      * @return none
      */
-    public void checkInBooks() {
+    public String checkInBooks(String title) {
         System.out.printf("Please enter the title of the book want to check in: ");
         Scanner in = new Scanner(System.in);
-        String input = in.nextLine();
+        String input = title;
         String message;
         if (books.containsValue(Book.bookTitle(input))) {
             int key = 0;
@@ -249,8 +251,8 @@ public class Database {
                         books.get(key).setStatus(Book.CHECKED_IN);
                         books.get(key).setDueDate(null);
 
-                        message = "Book titled \'" + input + "\' checked in";
-                        printMessage("-Confirmation Message-", message);
+
+
 
                         // Update library database file with books
                         keys = new TreeSet<>(books.keySet());
@@ -271,10 +273,14 @@ public class Database {
                                     formattedDate));
                             writeFile(list, "Library Database.txt");
                         }
-                        break;
+                        message = "Book titled \'" + input + "\' checked in";
+                        printMessage("-Confirmation Message-", message);
+                        return message;
+                        //break;
                     } else if (books.get(key).getStatus().equals(Book.CHECKED_IN)) {
                         message = "Book titled \'" + input + "\' is already checked in";
                         printMessage("-Error Message-", message);
+                        return message;
                     }
 
                 }
@@ -282,7 +288,9 @@ public class Database {
         } else {
             message = "Book with Title \'" + input + "\' does not exist";
             printMessage("-Error Message-", message);
+            return message;
         }
+        return "";
     }
 
     /**
@@ -292,10 +300,10 @@ public class Database {
      *
      * @return none
      */
-    public void checkOutBooks() {
+    public String checkOutBooks(String title) {
         System.out.printf("Please enter the title of the book want to check out: ");
-        Scanner in = new Scanner(System.in);
-        String input = in.nextLine();
+        //Scanner in = new Scanner(System.in);
+        String input = title;
 
         //check if the book is in the system
         String message;
@@ -318,9 +326,8 @@ public class Database {
                         books.get(key).setStatus(Book.CHECKED_OUT);
                         books.get(key).setDueDate(LocalDate.now().plusWeeks(4));
 
-                        message = "Book titled \'" + input + "\' checked out and due date set to " +
-                                  dtFormatter.format(books.get(key).getDueDate());
-                        printMessage("-Confirmation Message-", message);
+
+
 
                         keys = new TreeSet<>(books.keySet());
                         // Update library database file with books
@@ -342,13 +349,20 @@ public class Database {
                                     formattedDate));
                             writeFile(list, "Library Database.txt");
                         }
+                        message = "Book titled \'" + input + "\' checked out and due date set to " +
+                                  dtFormatter.format(books.get(key).getDueDate());
+                        printMessage("-Confirmation Message-", message);
+
 
                         showBooks();
-                        break;
+                        return message;
+                        //break;
 
                     } else if (books.get(key).getStatus().equals(Book.CHECKED_OUT)) {
                         message = "Book titled \'" + input + "\' is already checked out";
+
                         printMessage("-Error Message-", message);
+                        return message;
                     }
 
                 }
@@ -356,8 +370,11 @@ public class Database {
 
         } else {
             message = "Book with Title \'" + input + "\' does not exist";
+
             printMessage("-Error Message-", message);
+            return message;
         }
+        return "-- Something went wrong --";
 
 
     }
@@ -371,7 +388,7 @@ public class Database {
      * @param file A string specifying the file name to open for reading
      * @return a list of strings separated by new lines from the read text file
      */
-    private List<String> readFile(String file) {
+    public List<String> readFile(String file) {
         List<String> list = new ArrayList<String>();
         File tempFile = new File(file);
         Boolean fileExists = false;
@@ -383,20 +400,10 @@ public class Database {
             setFileName(s);
             tempFile = new File(s);
 
+
+
         } else {
-            while (!fileExists) {
-                count++;
-                if (count >= 3) {
-                    System.exit(1);
-                }
-                String message = "The file name entered cannot be found please try again";
-                printMessage("-Error Message-", message);
-                System.out.print("Enter the database file name: ");
-                Scanner in = new Scanner(System.in);
-                s = in.nextLine();
-                tempFile = new File(s);
-                fileExists = tempFile.exists();
-            }
+            list = null;
             setFileName(s);
         }
         try {
@@ -443,16 +450,14 @@ public class Database {
      * @return none
      * @throws NumberFormatException if the user input is a non integer type.
      */
-    public void deleteBooks() {
-
+    public String deleteBooks(String barcodeOrTitle) {
 
         System.out.printf("Please enter the barcode number or book title that you want to delete: ");
         Scanner in = new Scanner(System.in);
-        String input = in.nextLine();
+        String input = barcodeOrTitle;
         if (isIntegerInput(input)) {
             barcodeID = Integer.valueOf(input);
             String deletedBook = "";
-
 
             String message;
             if (books.containsKey(barcodeID)) {
@@ -465,6 +470,7 @@ public class Database {
                 // Clear library database file if no books left
                 if (keys.size() <= 0) {
                     writeFile(list, "Library Database.txt");
+
                 }
 
                 // Update library database file with books
@@ -472,16 +478,30 @@ public class Database {
                     barcodeID = books.get(i).getBarcodeID();
                     title = books.get(i).getTitle();
                     author = books.get(i).getAuthor();
-                    list.add(String.format("%d,%s,%s", barcodeID, title, author));
+                    genre = books.get(i).getGenre();
+                    status = books.get(i).getStatus();
+                    dueDate = books.get(i).getDueDate();
+                    String formattedDate = "";
+                    if (dueDate == null) {
+                        formattedDate = "null";
+                    } else {
+                        formattedDate = dtFormatter.format(dueDate).toString();
+                    }
+                    list.add(String.format("%d,%s,%s,%s,%s,%s", barcodeID, title, author, genre, status,
+                            formattedDate));
                     writeFile(list, "Library Database.txt");
                 }
                 message = "Book titled \'" + deletedBook + "\' successfully deleted";
                 printMessage("-Confirmation Message-", message);
 
+
                 showBooks();
+                return message;
             } else {
                 message = "Book with Barcode Number \'" + barcodeID + "\' does not exist";
                 printMessage("-Error Message-", message);
+                return message;
+
             }
         } else {
 
@@ -493,21 +513,29 @@ public class Database {
                 int key = 0;
                 String value = input;
 
-                keys = new TreeSet<>(books.keySet());
-                List<String> list = new ArrayList<String>();
+                //keys = new TreeSet<>(books.keySet());
+                //List<String> list = new ArrayList<String>();
 
 
                 // Finds the key and remove book
+
                 for (Integer i : keys) {
                     key = i;
                     if (input.equals(books.get(i).getTitle())) {
                         System.out.println("The key is " + key);
                         books.remove(key);
+                        //System.out.println("Clear lib db key is "+key+"key size is: " + keys.size());
                         break;
                     }
                 }
+
+                keys = new TreeSet<>(books.keySet());
+                List<String> list = new ArrayList<String>();
+
+
                 // Clear library database file if no books left
                 if (keys.size() <= 0) {
+
                     writeFile(list, "Library Database.txt");
                 }
                 keys = new TreeSet<>(books.keySet());
@@ -533,12 +561,17 @@ public class Database {
                 message = "Book titled \'" + input + "\' successfully deleted";
                 printMessage("-Confirmation Message-", message);
 
+
                 showBooks();
+                return message;
             } else {
                 message = "Book with Title \'" + input + "\' does not exist";
                 printMessage("-Error Message-", message);
+                return message;
             }
         }
+
+
     }
 
     /**

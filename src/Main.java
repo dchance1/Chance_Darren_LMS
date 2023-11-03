@@ -67,16 +67,16 @@ public class Main {
                     database.showBooks();
                     break;
                 case "d":
-                    database.deleteBooks();
+                    //database.deleteBooks();
                     break;
                 case "a":
                     database.addBooks();
                     break;
                 case "i":
-                    database.checkInBooks();
+                    //database.checkInBooks();
                     break;
                 case "o":
-                    database.checkOutBooks();
+                    //database.checkOutBooks();
                     break;
                 case "q":
                     System.out.println("Program ended!");
