@@ -70,11 +70,11 @@ public class MainFrame extends JFrame {
                 // db parameters
 
                 //Class.forName("org.sqlite.JDBC");
-                String url = "jdbc:sqlite:"+fileName;
+                String url = "jdbc:sqlite:" + fileName;
                 // create a connection to the database
                 conn = DriverManager.getConnection(url);
 
-                System.out.println("Connection to SQLite DB name "+fileName+" has been established.");
+                System.out.println("Connection to SQLite DB name " + fileName + " has been established.");
 
             } catch (SQLException e) {
                 error = e.getMessage();
@@ -82,20 +82,16 @@ public class MainFrame extends JFrame {
                 systemMessages.setText(fileName + " Could not be loaded");
             }
 
-        }else {
+        } else {
 
 
             throw new Exception("File not found");
 
         }
 
-
-
-
-
     }
 
-    public void updateSQLiteTable(){
+    public void updateSQLiteTable() {
         try {
             Statement statement = conn.createStatement();
 
@@ -105,8 +101,7 @@ public class MainFrame extends JFrame {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
             model.setRowCount(0);
 
-            while(rs.next())
-            {
+            while (rs.next()) {
                 // read the result set
                 System.out.println("barcode = " + rs.getString("barcode"));
                 System.out.println("title = " + rs.getString("title"));
@@ -121,7 +116,7 @@ public class MainFrame extends JFrame {
                 // Check for due date if book status not checked in
                 if (status.equals(Book.CHECKED_IN) || status.strip().toLowerCase().equals("null")) {
                     dueDate = null;
-                    System.out.println("Result is book " + barcodeID+" is checked in");
+                    System.out.println("Result is book " + barcodeID + " is checked in");
                 } else {
                     // Parse text to date if parsable, if not throw exception and advise user of the issue and set due
                     // date to null;
@@ -129,8 +124,9 @@ public class MainFrame extends JFrame {
                         dueDate = LocalDate.parse(rs.getString("due_date"), dtFormatter);
                         System.out.println("due_date" + rs.getString("due_date"));
                     } catch (Exception e) {
-                        String message = "Invalid date \'" + rs.getString("due_date") + "\' entered for Barcode Number '" + barcodeID +
-                                         "' date must match 'yyyy/mm/dd'";
+                        String message =
+                                "Invalid date \'" + rs.getString("due_date") + "\' entered for Barcode Number '" +
+                                barcodeID + "' date must match 'yyyy/mm/dd'";
                         systemMessages.setText(message);
                         dueDate = null;
                     }
@@ -153,46 +149,90 @@ public class MainFrame extends JFrame {
 
     }
 
+    private boolean isIntegerInput(String input) {
+        if (input == null) {
+            return false;
+        }
+        try {
+            int n = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
+    private void deleteBook(String barcodeOrTitle) {
 
-    private void loadTable(String fileName){
+        String input = barcodeOrTitle;
 
+        if (isIntegerInput(barcodeOrTitle)) {
+            System.out.println("Barcode Entered");
+            try {
+                Statement stmt = conn.createStatement();
+                String sqlStatement = "DELETE FROM books_table " +
+                                      "WHERE barcode = " + input;
+                stmt.executeUpdate(sqlStatement);
 
-
-            database.readFile(this.fileName);
-            fileNameField.setText("");
-            database.getBooks();
-            books = database.showBooks();
-            //systemMessages.setText(this.fileName + " database file loaded");
-
-
-            keys = new TreeSet<>(books.keySet());
-            Object[] obj = new Object[6];
-            DefaultTableModel model = (DefaultTableModel) table1.getModel();
-            model.setRowCount(0);
-            for (Integer i : keys) {
-                barcodeID = books.get(i).getBarcodeID();
-                title = books.get(i).getTitle();
-                author = books.get(i).getAuthor();
-                genre = books.get(i).getGenre();
-                status = books.get(i).getStatus();
-                dueDate = books.get(i).getDueDate();
-                String formattedDate = "";
-                if (dueDate == null) {
-                    formattedDate = "null";
-                } else {
-                    formattedDate = dtFormatter.format(dueDate).toString();
-                }
-
-                obj[0] = barcodeID;
-                obj[1] = title;
-                obj[2] = author;
-                obj[3] = genre;
-                obj[4] = status;
-                obj[5] = dueDate;
-
-                model.addRow(obj);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+
+
+        } else {
+            System.out.println("Title Enetered");
+
+            try {
+                Statement stmt = conn.createStatement();
+                String sqlStatement = "DELETE FROM books_table " +
+                                      "WHERE title = '" + input + "'";
+                stmt.executeUpdate(sqlStatement);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+
+    }
+
+    private void loadTable(String fileName) {
+
+
+        database.readFile(this.fileName);
+        fileNameField.setText("");
+        database.getBooks();
+        books = database.showBooks();
+        //systemMessages.setText(this.fileName + " database file loaded");
+
+
+        keys = new TreeSet<>(books.keySet());
+        Object[] obj = new Object[6];
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        model.setRowCount(0);
+        for (Integer i : keys) {
+            barcodeID = books.get(i).getBarcodeID();
+            title = books.get(i).getTitle();
+            author = books.get(i).getAuthor();
+            genre = books.get(i).getGenre();
+            status = books.get(i).getStatus();
+            dueDate = books.get(i).getDueDate();
+            String formattedDate = "";
+            if (dueDate == null) {
+                formattedDate = "null";
+            } else {
+                formattedDate = dtFormatter.format(dueDate).toString();
+            }
+
+            obj[0] = barcodeID;
+            obj[1] = title;
+            obj[2] = author;
+            obj[3] = genre;
+            obj[4] = status;
+            obj[5] = dueDate;
+
+            model.addRow(obj);
+        }
 
 
     }
@@ -212,7 +252,7 @@ public class MainFrame extends JFrame {
         StyledDocument docStyle = systemMessages.getStyledDocument();
         SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
         StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
-        docStyle.setParagraphAttributes(0, docStyle.getLength(),centerAttribute,false);
+        docStyle.setParagraphAttributes(0, docStyle.getLength(), centerAttribute, false);
 
         systemMessages.setText("Select a menu option below");
 
@@ -224,7 +264,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Component[] obj = sidePanel.getComponents();
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
 
@@ -237,10 +277,6 @@ public class MainFrame extends JFrame {
                 fileNameField.requestFocusInWindow();
 
 
-
-
-
-
             }
         });
 
@@ -250,7 +286,7 @@ public class MainFrame extends JFrame {
                 systemMessages.setText("Enter the book barcode number or title for the book you wish to delete");
                 Component[] obj = sidePanel.getComponents();
 
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
                 sidePanel.setVisible(true);
@@ -273,7 +309,7 @@ public class MainFrame extends JFrame {
                 try {
                     connect(fileName);
                     updateSQLiteTable();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     // don't try and load table
                     systemMessages.setText("File not found");
                 }
@@ -284,7 +320,7 @@ public class MainFrame extends JFrame {
 
                 sidePanel.setVisible(false);
                 Component[] obj = sidePanel.getComponents();
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
 
@@ -296,13 +332,20 @@ public class MainFrame extends JFrame {
 
                 String barcodeOrTitle = "";
                 barcodeOrTitle = barcodeOrTitleTxtField.getText();
-                String deleteMessage = database.deleteBooks(barcodeOrTitle);
-                systemMessages.setText(deleteMessage);
-                loadTable(fileName);
 
+                // delete row
+                deleteBook(barcodeOrTitle);
+
+                // end of delete code
+
+                //String deleteMessage = database.deleteBooks(barcodeOrTitle);
+                //systemMessages.setText(deleteMessage);
+                //loadTable(fileName);
+
+                // UI elements closing side panel
                 sidePanel.setVisible(false);
                 Component[] obj = sidePanel.getComponents();
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
 
@@ -331,7 +374,7 @@ public class MainFrame extends JFrame {
                 systemMessages.setText("Enter the book title you wish to check out");
                 Component[] obj = sidePanel.getComponents();
 
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
                 sidePanel.setVisible(true);
@@ -360,7 +403,7 @@ public class MainFrame extends JFrame {
                 systemMessages.setText("Enter the book title you wish to check in");
                 Component[] obj = sidePanel.getComponents();
 
-                for(Component o: obj){
+                for (Component o : obj) {
                     o.setVisible(false);
                 }
                 sidePanel.setVisible(true);
@@ -388,9 +431,8 @@ public class MainFrame extends JFrame {
     }
 
     private void createTable() {
-        table1.setModel(new DefaultTableModel(
-                null, new String[]{"Barcode", "Title", "Author",
-                "Genre", "Status", "Due Date"}
+        table1.setModel(new DefaultTableModel(null, new String[]{"Barcode", "Title", "Author", "Genre", "Status",
+                "Due Date"}
 
         ));
 
@@ -406,10 +448,6 @@ public class MainFrame extends JFrame {
         }
 
 
-
-
-
-
     }
 
 
@@ -421,9 +459,7 @@ public class MainFrame extends JFrame {
         mainFrame.systemMessages.setText("Select a menu option below");
 
 
-
     }
-
 
 
 }
