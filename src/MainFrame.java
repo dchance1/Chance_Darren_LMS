@@ -6,9 +6,11 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.SortedSet;
@@ -50,32 +52,45 @@ public class MainFrame extends JFrame {
     private String title = "";
     private String author = "";
     private String genre = "";
-    DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
+    DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-M-d", Locale.ENGLISH);
     //private static LocalDate date = LocalDate.now();
     private int barcodeID;
     private LocalDate dueDate = LocalDate.now();
     private String status;
     private String fileName;
 
+
     Connection conn = null;
 
-    public void connect() {
-
+    public void connect(String fileName) throws Exception {
         String error = "";
-        try {
-            // db parameters
+        File dbFile = new File(fileName);
+        if (dbFile.exists()) {
+            try {
+                // db parameters
 
-            //Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:LMS.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
+                //Class.forName("org.sqlite.JDBC");
+                String url = "jdbc:sqlite:"+fileName;
+                // create a connection to the database
+                conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
+                System.out.println("Connection to SQLite DB name "+fileName+" has been established.");
 
-        } catch (SQLException e) {
-            error = e.getMessage();
-            systemMessages.setText(error);
+            } catch (SQLException e) {
+                error = e.getMessage();
+                e.printStackTrace();
+                systemMessages.setText(fileName + " Could not be loaded");
+            }
+
+        }else {
+
+
+            throw new Exception("File not found");
+
         }
+
+
+
 
 
     }
@@ -85,15 +100,56 @@ public class MainFrame extends JFrame {
             Statement statement = conn.createStatement();
 
             ResultSet rs = statement.executeQuery("select * from books_table");
+            // Creating object to store rows of data from SQLite database
+            Object[] obj = new Object[6];
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            model.setRowCount(0);
+
             while(rs.next())
             {
                 // read the result set
                 System.out.println("barcode = " + rs.getString("barcode"));
                 System.out.println("title = " + rs.getString("title"));
+
+                barcodeID = Integer.parseInt(rs.getString("barcode"));
+                title = rs.getString("title");
+                author = rs.getString("author");
+                genre = rs.getString("genre");
+                status = rs.getString("status");
+                dueDate = null;
+
+                // Check for due date if book status not checked in
+                if (status.equals(Book.CHECKED_IN) || status.strip().toLowerCase().equals("null")) {
+                    dueDate = null;
+                    System.out.println("Result is book " + barcodeID+" is checked in");
+                } else {
+                    // Parse text to date if parsable, if not throw exception and advise user of the issue and set due
+                    // date to null;
+                    try {
+                        dueDate = LocalDate.parse(rs.getString("due_date"), dtFormatter);
+                        System.out.println("due_date" + rs.getString("due_date"));
+                    } catch (Exception e) {
+                        String message = "Invalid date \'" + rs.getString("due_date") + "\' entered for Barcode Number '" + barcodeID +
+                                         "' date must match 'yyyy/mm/dd'";
+                        systemMessages.setText(message);
+                        dueDate = null;
+                    }
+                }
+
+                obj[0] = barcodeID;
+                obj[1] = title;
+                obj[2] = author;
+                obj[3] = genre;
+                obj[4] = status;
+                obj[5] = dueDate;
+
+                model.addRow(obj);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            //throw new RuntimeException(e);
+            systemMessages.setText("Table could not load, try selecting database then try again");
         }
+
 
     }
 
@@ -214,13 +270,16 @@ public class MainFrame extends JFrame {
                 fileName = fileNameField.getText();
                 System.out.println(fileName);
                 ///load table
-                try{
-                    loadTable(fileName);
-                    systemMessages.setText("Database file \""+fileName+"\" loaded");
-                } catch (Exception e1){
-                    systemMessages.setText("The system cannot find the file specified");
-                    systemMessages.setCaretPosition(0);
+                try {
+                    connect(fileName);
+                    updateSQLiteTable();
+                }catch (Exception e1){
+                    // don't try and load table
+                    systemMessages.setText("File not found");
                 }
+
+
+                //end of load table
 
 
                 sidePanel.setVisible(false);
@@ -320,10 +379,6 @@ public class MainFrame extends JFrame {
                 sidePanel.setVisible(false);
             }
         });
-
-        connect();
-
-
 
 
     }

@@ -26,15 +26,6 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/sqlite-jdbc-3.43.2.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
           <root url="jar://$USER_HOME$/Downloads/slf4j-api-1.7.36.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -45,6 +36,15 @@
       <library>
         <CLASSES>
           <root url="jar://$USER_HOME$/Downloads/slf4j-nop-1.7.36.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/sqlite-jdbc-3.43.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
