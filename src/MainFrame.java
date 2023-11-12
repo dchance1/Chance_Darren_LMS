@@ -6,6 +6,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Hashtable;
@@ -56,8 +57,51 @@ public class MainFrame extends JFrame {
     private String status;
     private String fileName;
 
+    Connection conn = null;
+
+    public void connect() {
+
+        String error = "";
+        try {
+            // db parameters
+
+            //Class.forName("org.sqlite.JDBC");
+            String url = "jdbc:sqlite:LMS.db";
+            // create a connection to the database
+            conn = DriverManager.getConnection(url);
+
+            System.out.println("Connection to SQLite has been established.");
+
+        } catch (SQLException e) {
+            error = e.getMessage();
+            systemMessages.setText(error);
+        }
+
+
+    }
+
+    public void updateSQLiteTable(){
+        try {
+            Statement statement = conn.createStatement();
+
+            ResultSet rs = statement.executeQuery("select * from books_table");
+            while(rs.next())
+            {
+                // read the result set
+                System.out.println("barcode = " + rs.getString("barcode"));
+                System.out.println("title = " + rs.getString("title"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
 
     private void loadTable(String fileName){
+
+
 
             database.readFile(this.fileName);
             fileNameField.setText("");
@@ -208,7 +252,10 @@ public class MainFrame extends JFrame {
         ADDBOOKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                leftPanel.setVisible(true);
+
+
+                updateSQLiteTable();
+
             }
         });
         exitButton.addActionListener(new ActionListener() {
@@ -273,6 +320,12 @@ public class MainFrame extends JFrame {
                 sidePanel.setVisible(false);
             }
         });
+
+        connect();
+
+
+
+
     }
 
     public void resetMessage() {
