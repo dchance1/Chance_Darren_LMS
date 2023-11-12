@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="SQLlite successfully loading database&#10;- Updated openDatabaseFileButton.addActionListener to connect to sqlite db and attempt to load table">
-      <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
-    </list>
+    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Delete books from sqltable&#10;- can delete books with id or title now" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,7 +144,7 @@
       <workItem from="1698179137298" duration="542000" />
       <workItem from="1698541840850" duration="131079000" />
       <workItem from="1699720229526" duration="7224000" />
-      <workItem from="1699757488373" duration="13806000" />
+      <workItem from="1699757488373" duration="15026000" />
     </task>
     <task id="LOCAL-00001" summary="Added multi-line class comment to Book.java to describe use.">
       <option name="closed" value="true" />
@@ -516,7 +514,31 @@
       <option name="project" value="LOCAL" />
       <updated>1699797049971</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Delete books from sqltable&#10;- can delete books with id or title now">
+      <option name="closed" value="true" />
+      <created>1699810255188</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1699810255188</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Delete books from sqltable&#10;- can delete books with id or title now">
+      <option name="closed" value="true" />
+      <created>1699810269891</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1699810269891</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Delete books from sqltable&#10;- can delete books with id or title now">
+      <option name="closed" value="true" />
+      <created>1699810611372</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1699810611372</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -534,7 +556,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updates to Database.java&#10;-Added code to read and add additional attributes added to book class in getBooks()&#10;-Added code to display the additional attributes added to the book class in showBooks()" />
     <MESSAGE value="Added new methods to Book.java&#10;-Added equals method for comparing books&#10;-Added bookTitle method which returns a book for the sole purpose of comparing a books title to other Book objects" />
     <MESSAGE value="Update deleteBooks()&#10;-Added logic to automatically detect if the user is entering a text or a barcode numeber, then queries that to delete the associated book&#10;&#10;-Still need to actually enable deleting the of book by title" />
     <MESSAGE value="Bug fix&#10;&#10;-fixed issue where book was returning that book was found even if title did not exist in database" />
@@ -559,7 +580,8 @@
     <MESSAGE value="Added sqlite" />
     <MESSAGE value="Starting process of adding sqlite database" />
     <MESSAGE value="SQLlite successfully loading database&#10;- Updated openDatabaseFileButton.addActionListener to connect to sqlite db and attempt to load table" />
-    <option name="LAST_COMMIT_MESSAGE" value="SQLlite successfully loading database&#10;- Updated openDatabaseFileButton.addActionListener to connect to sqlite db and attempt to load table" />
+    <MESSAGE value="Delete books from sqltable&#10;- can delete books with id or title now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Delete books from sqltable&#10;- can delete books with id or title now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
