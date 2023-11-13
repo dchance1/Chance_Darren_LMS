@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Delete books from sqltable&#10;- can delete books with id or title now">
+    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LMS.db" beforeDir="false" afterPath="$PROJECT_DIR$/LMS.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -150,15 +149,7 @@
       <workItem from="1698179137298" duration="542000" />
       <workItem from="1698541840850" duration="131079000" />
       <workItem from="1699720229526" duration="7224000" />
-      <workItem from="1699757488373" duration="25427000" />
-    </task>
-    <task id="LOCAL-00002" summary="Update Book.java&#10;&#10;Removing erroneous comments.">
-      <option name="closed" value="true" />
-      <created>1693509659505</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1693509659505</updated>
+      <workItem from="1699757488373" duration="27874000" />
     </task>
     <task id="LOCAL-00003" summary="Added addBooks method.&#10;This allows user to enter book id, book title, book author when invoked and saves changes to database.">
       <option name="closed" value="true" />
@@ -544,7 +535,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699811353557</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file">
+      <option name="closed" value="true" />
+      <created>1699840209334</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1699840209335</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -562,7 +561,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added new methods to Book.java&#10;-Added equals method for comparing books&#10;-Added bookTitle method which returns a book for the sole purpose of comparing a books title to other Book objects" />
     <MESSAGE value="Update deleteBooks()&#10;-Added logic to automatically detect if the user is entering a text or a barcode numeber, then queries that to delete the associated book&#10;&#10;-Still need to actually enable deleting the of book by title" />
     <MESSAGE value="Bug fix&#10;&#10;-fixed issue where book was returning that book was found even if title did not exist in database" />
     <MESSAGE value="Update deleteBooks()&#10;-Added code to delete book upon entry of the correct title&#10;&#10;-Updated method to write changes to database textfile" />
@@ -587,7 +585,8 @@
     <MESSAGE value="Starting process of adding sqlite database" />
     <MESSAGE value="SQLlite successfully loading database&#10;- Updated openDatabaseFileButton.addActionListener to connect to sqlite db and attempt to load table" />
     <MESSAGE value="Delete books from sqltable&#10;- can delete books with id or title now" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete books from sqltable&#10;- can delete books with id or title now" />
+    <MESSAGE value="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

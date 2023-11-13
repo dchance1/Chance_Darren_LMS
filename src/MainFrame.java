@@ -189,25 +189,55 @@ public class MainFrame extends JFrame {
         dueDate = LocalDate.now().plusWeeks(4);
         String dueDateText = dtFormatter.format(dueDate).toString();
 
+        boolean isCheckedOut = false;
 
         try {
-            Statement stmt = conn.createStatement();
-            String sqlStatement = "UPDATE books_table " +
-                                  "SET status = 'Checked Out', " +
-                                  "due_date = '" + dueDateText + "' " +
-                                  "WHERE title = '" + input + "'";
-            int rows = stmt.executeUpdate(sqlStatement);
-            updateSQLiteTable();
-            if (rows == 0) {
-                systemMessages.setText("Title '" + title + "' does not exist");
-            } else {
-                systemMessages.setText("Book '" + title + "' checked out");
+            Statement statement = conn.createStatement();
+
+            ResultSet rs = statement.executeQuery("SELECT status " +
+                                                  "FROM books_table " +
+                                                  "WHERE title = '" + input + "'");
+            while (rs.next()){
+                String status = rs.getString("status");
+                if (status.equals("Checked Out")){
+                    isCheckedOut = true;
+                }
             }
 
+        } catch (SQLException e) {
 
-        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        if (!isCheckedOut){
+            try {
+                Statement stmt = conn.createStatement();
+                String sqlStatement = "UPDATE books_table " +
+                                      "SET status = 'Checked Out', " +
+                                      "due_date = '" + dueDateText + "' " +
+                                      "WHERE title = '" + input + "'";
+                int rows = stmt.executeUpdate(sqlStatement);
+                updateSQLiteTable();
+
+
+                if (rows == 0) {
+                    systemMessages.setText("Title '" + title + "' does not exist");
+                }
+                if (rows >0){
+                    systemMessages.setText("Book '" + title + "' checked out");
+                }
+
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        if(isCheckedOut){
+            systemMessages.setText("Book already checked out");
+        }
+
+
 
     }
 
@@ -224,6 +254,9 @@ public class MainFrame extends JFrame {
                 updateSQLiteTable();
                 if (rows == 0) {
                     systemMessages.setText("Barcode '" + barcodeOrTitle + "' does not exist");
+                }
+                if (rows > 0) {
+                    systemMessages.setText("Book with barcode '" + barcodeOrTitle + "' deleted");
                 }
 
 
@@ -242,6 +275,9 @@ public class MainFrame extends JFrame {
                 updateSQLiteTable();
                 if (rows == 0) {
                     systemMessages.setText("Title '" + barcodeOrTitle + "' does not exist");
+                }
+                if (rows > 0) {
+                    systemMessages.setText("Book title '" + barcodeOrTitle + "' deleted");
                 }
 
 
@@ -428,8 +464,9 @@ public class MainFrame extends JFrame {
 
 
                 //do nothing
-                systemMessages.setText("The 'ADD BOOK' method is under maintenance, please follow the manual process for adding" +
-                                       " books to the library via the database sql file");
+                systemMessages.setText(
+                        "The 'ADD BOOK' method is under maintenance, please follow the manual process for adding" +
+                        " books to the library via the database sql file");
 
             }
         });
