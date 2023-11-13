@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Delete books from sqltable&#10;- can delete books with id or title now" />
+    <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Delete books from sqltable&#10;- can delete books with id or title now">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LMS.db" beforeDir="false" afterPath="$PROJECT_DIR$/LMS.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,10 +89,11 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "create.test.in.the.same.root": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
     "extract.method.default.visibility": "protected",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/darre/Downloads/sqlite-jdbc-3.43.2.2.jar",
+    "last_opened_file_path": "C:/Users/darre/books_table.csv",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -144,15 +150,7 @@
       <workItem from="1698179137298" duration="542000" />
       <workItem from="1698541840850" duration="131079000" />
       <workItem from="1699720229526" duration="7224000" />
-      <workItem from="1699757488373" duration="15026000" />
-    </task>
-    <task id="LOCAL-00001" summary="Added multi-line class comment to Book.java to describe use.">
-      <option name="closed" value="true" />
-      <created>1693355383413</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1693355383413</updated>
+      <workItem from="1699757488373" duration="25427000" />
     </task>
     <task id="LOCAL-00002" summary="Update Book.java&#10;&#10;Removing erroneous comments.">
       <option name="closed" value="true" />
@@ -538,7 +536,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699810611372</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Delete books from sqltable&#10;- can delete books with id or title now">
+      <option name="closed" value="true" />
+      <created>1699811353557</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1699811353557</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

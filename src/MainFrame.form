@@ -156,7 +156,7 @@
             <properties>
               <autoscrolls value="true"/>
               <maximumSize width="32767" height="100"/>
-              <preferredSize width="54" height="50"/>
+              <preferredSize width="54" height="60"/>
             </properties>
             <border type="bevel-lowered"/>
             <children>
