@@ -1,7 +1,15 @@
 import java.io.File;
 import java.sql.*;
 
-
+/**
+ * Darren Chance<br>
+ * CEN 3024 - Software Development 1<br>
+ * August 28, 2023<br>
+ * Database.java<br>
+ * <p>
+ * <p>
+ * The class {@code Book} creates a database connection and gives the use access to the table with all data
+ */
 public class Database {
     // This class will be used to interface with an SQLite database
     private Connection conn = null;

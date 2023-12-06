@@ -13,7 +13,16 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.SortedSet;
 
-
+/**
+ * Darren Chance<br>
+ * CEN 3024 - Software Development 1<br>
+ * August 28, 2023<br>
+ * MainFrame.java<br>
+ * <p>
+ * <p>
+ * The class {@code Book} creates a GUI window and some core application functionality for interacting with the
+ * Library Management System app.
+ */
 public class MainFrame extends JFrame {
     private JPanel mainPanel;
     private JTextField barcodeOrTitleTxtField;
@@ -45,9 +54,9 @@ public class MainFrame extends JFrame {
     //private JTextPane thisIsSampleTextTextPane;
     private Hashtable<Integer, Book> books;
     private SortedSet<Integer> keys;
-    private String title = "";
-    private String author = "";
-    private String genre = "";
+    private final String title = "";
+    private final String author = "";
+    private final String genre = "";
     DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
     //private static LocalDate date = LocalDate.now();
     private int barcodeID;
@@ -59,6 +68,13 @@ public class MainFrame extends JFrame {
     Connection conn = null;
     Database db = new Database();
 
+    /**
+     * Method Name: updateSQLiteTable
+     * <p>
+     * This method loads the SQL database to data and the application gui.
+     *
+     * @return none
+     */
     public void updateSQLiteTable() {
         try {
             ResultSet rs = db.getBooks_table();
@@ -77,8 +93,7 @@ public class MainFrame extends JFrame {
                 LocalDate dueDate = null;
 
                 // Check for due date if book status not checked in
-                if (obj[4].toString().equals(Book.CHECKED_IN) ||
-                    obj[4].toString().strip().toLowerCase().equals("null")) {
+                if (obj[4].toString().equals(Book.CHECKED_IN) || obj[4].toString().strip().equalsIgnoreCase("null")) {
                     dueDate = null;
                 } else {
                     // Parse text to date if parsable, if not throw exception and advise user of the issue and set due
@@ -89,7 +104,7 @@ public class MainFrame extends JFrame {
                         //System.out.println("due_date" + rs.getString("due_date"));
                     } catch (Exception e) {
                         String message =
-                                "Invalid date \'" + rs.getString("due_date") + "\' entered for Barcode Number '" +
+                                "Invalid date '" + rs.getString("due_date") + "' entered for Barcode Number '" +
                                 obj[0].toString() + "' date must match 'yyyy/mm/dd'";
                         systemMessages.setText(message);
                         dueDate = null;
@@ -103,6 +118,14 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Method Name: isIntegerInput
+     * <p>
+     * This method determines if the input is an integer
+     *
+     * @param input A string
+     * @return true if input is an interger and false if it isn't
+     */
     private boolean isIntegerInput(String input) {
         if (input == null) {
             return false;
@@ -116,8 +139,16 @@ public class MainFrame extends JFrame {
     }
 
 
+    /**
+     * Method Name: checkInBook
+     * <p>
+     * This method checks in the specified book
+     *
+     * @param title A book title
+     * @return none
+     */
     private void checkInBook(String title) {
-        //String input = title;
+
         try {
             Statement stmt = conn.createStatement();
             String sqlStatement =
@@ -136,11 +167,19 @@ public class MainFrame extends JFrame {
         }
     }
 
-    
+
+    /**
+     * Method Name: checkOutBook
+     * <p>
+     * This method checks out the specified book
+     *
+     * @param title A book title
+     * @return none
+     */
     private void checkOutBook(String title) {
         String input = title;
         dueDate = LocalDate.now().plusWeeks(4);
-        String dueDateText = dtFormatter.format(dueDate).toString();
+        String dueDateText = dtFormatter.format(dueDate);
 
         boolean isCheckedOut = false;
 
@@ -191,6 +230,14 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * Method Name: deleteBook
+     * <p>
+     * This method deletes a book from the library based on the user id or the title
+     *
+     * @param barcodeOrTitle A book title or book id as a string type
+     * @return none
+     */
     private void deleteBook(String barcodeOrTitle) {
 
         String input = barcodeOrTitle;
@@ -416,7 +463,6 @@ public class MainFrame extends JFrame {
                 checkOutBook(input);
 
 
-
                 sidePanel.setVisible(false);
 
 
@@ -463,16 +509,18 @@ public class MainFrame extends JFrame {
 
     }
 
-    public void resetMessage() {
-        messageText.setText("Select a menu option below");
-    }
 
+    /**
+     * Method Name: createTable
+     * <p>
+     * This method creates a blank gui table with headers
+     *
+     * @return none
+     */
     private void createTable() {
         table1.setModel(new DefaultTableModel(null, new String[]{"Barcode", "Title", "Author", "Genre", "Status",
                 "Due Date"}
-
         ));
-
 
         DefaultTableModel model = (DefaultTableModel) table1.getModel();
         table1.setShowHorizontalLines(true);
@@ -483,20 +531,11 @@ public class MainFrame extends JFrame {
             table1.getColumnModel().getColumn(i).setPreferredWidth(200);
             table1.getColumnModel().getColumn(i).setMaxWidth(300);
         }
-
-
     }
-
 
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
-
         mainFrame.sidePanel.setVisible(false);
-
         mainFrame.systemMessages.setText("Select a menu option below");
-
-
     }
-
-
 }

@@ -11,10 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6181ca4b-1b2f-4636-aa22-a97e55ce9521" name="Changes" comment="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LMS.db" beforeDir="false" afterPath="$PROJECT_DIR$/LMS.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Database1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Database1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +69,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -164,15 +161,7 @@
       <workItem from="1701128811631" duration="82000" />
       <workItem from="1701316339512" duration="796000" />
       <workItem from="1701804425241" duration="125000" />
-      <workItem from="1701900371194" duration="743000" />
-    </task>
-    <task id="LOCAL-00005" summary="Code format non-functional change.">
-      <option name="closed" value="true" />
-      <created>1693599147929</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1693599147929</updated>
+      <workItem from="1701900371194" duration="1491000" />
     </task>
     <task id="LOCAL-00006" summary="Updated Main.java comments&#10;Added overall description of class and application.">
       <option name="closed" value="true" />
@@ -558,7 +547,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700184264659</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file">
+      <option name="closed" value="true" />
+      <created>1701901318012</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1701901318012</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -602,22 +599,6 @@
     <MESSAGE value="Delete books from sqltable&#10;- can delete books with id or title now" />
     <MESSAGE value="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated methods to implement sqlite db&#10;-all main methods now use sqlite db file instead of a .txt file" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Database.java</url>
-          <line>17</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Database.java</url>
-          <line>360</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
