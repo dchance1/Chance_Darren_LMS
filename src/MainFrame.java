@@ -6,15 +6,12 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 
 public class MainFrame extends JFrame {
@@ -46,7 +43,6 @@ public class MainFrame extends JFrame {
     private JButton checkBookInButton;
     private JButton checkInButton;
     //private JTextPane thisIsSampleTextTextPane;
-    private final Database database = new Database();
     private Hashtable<Integer, Book> books;
     private SortedSet<Integer> keys;
     private String title = "";
@@ -61,90 +57,50 @@ public class MainFrame extends JFrame {
 
 
     Connection conn = null;
-
-    public void connect(String fileName) throws Exception {
-
-
-        String error = "";
-        File dbFile = new File(fileName);
-        if (dbFile.exists()) {
-            try {
-                // db parameters
-
-                //Class.forName("org.sqlite.JDBC");
-                String url = "jdbc:sqlite:" + fileName;
-                // create a connection to the database
-                conn = DriverManager.getConnection(url);
-
-                System.out.println("Connection to SQLite DB name " + fileName + " has been established.");
-
-            } catch (SQLException e) {
-                error = e.getMessage();
-                e.printStackTrace();
-                systemMessages.setText(fileName + " Could not be loaded");
-            }
-
-        } else {
-
-
-            throw new Exception("File not found");
-
-        }
-
-    }
+    Database db = new Database();
 
     public void updateSQLiteTable() {
         try {
-            Statement statement = conn.createStatement();
-
-            ResultSet rs = statement.executeQuery("select * from books_table");
+            ResultSet rs = db.getBooks_table();
             // Creating object to store rows of data from SQLite database
             Object[] obj = new Object[6];
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
             model.setRowCount(0);
-
             while (rs.next()) {
                 // read the result set
-                barcodeID = Integer.parseInt(rs.getString("barcode"));
-                title = rs.getString("title");
-                author = rs.getString("author");
-                genre = rs.getString("genre");
-                status = rs.getString("status");
-                dueDate = null;
+                obj[0] = Integer.parseInt(rs.getString("barcode"));
+                obj[1] = rs.getString("title");
+                obj[2] = rs.getString("author");
+                obj[3] = rs.getString("genre");
+                obj[4] = rs.getString("status");
+
+                LocalDate dueDate = null;
 
                 // Check for due date if book status not checked in
-                if (status.equals(Book.CHECKED_IN) || status.strip().toLowerCase().equals("null")) {
+                if (obj[4].toString().equals(Book.CHECKED_IN) ||
+                    obj[4].toString().strip().toLowerCase().equals("null")) {
                     dueDate = null;
                 } else {
                     // Parse text to date if parsable, if not throw exception and advise user of the issue and set due
                     // date to null;
                     try {
                         dueDate = LocalDate.parse(rs.getString("due_date"), dtFormatter);
+                        obj[5] = dueDate;
                         //System.out.println("due_date" + rs.getString("due_date"));
                     } catch (Exception e) {
                         String message =
                                 "Invalid date \'" + rs.getString("due_date") + "\' entered for Barcode Number '" +
-                                barcodeID + "' date must match 'yyyy/mm/dd'";
+                                obj[0].toString() + "' date must match 'yyyy/mm/dd'";
                         systemMessages.setText(message);
                         dueDate = null;
                     }
                 }
-
-                obj[0] = barcodeID;
-                obj[1] = title;
-                obj[2] = author;
-                obj[3] = genre;
-                obj[4] = status;
-                obj[5] = dueDate;
-
                 model.addRow(obj);
             }
         } catch (Exception e) {
             //throw new RuntimeException(e);
             systemMessages.setText("Table could not load, try selecting database then try again");
         }
-
-
     }
 
     private boolean isIntegerInput(String input) {
@@ -159,15 +115,14 @@ public class MainFrame extends JFrame {
         return true;
     }
 
+
     private void checkInBook(String title) {
-        String input = title;
-
-
+        //String input = title;
         try {
             Statement stmt = conn.createStatement();
-            String sqlStatement = "UPDATE books_table " +
-                                  "SET status = 'Checked In', due_date = NULL " +
-                                  "WHERE title = '" + input + "'";
+            String sqlStatement =
+                    "UPDATE books_table " + "SET status = 'Checked In', due_date = NULL " + "WHERE title = '" + title +
+                    "'";
             int rows = stmt.executeUpdate(sqlStatement);
             updateSQLiteTable();
 
@@ -176,14 +131,12 @@ public class MainFrame extends JFrame {
             } else {
                 systemMessages.setText("Book '" + title + "' checked in");
             }
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    
     private void checkOutBook(String title) {
         String input = title;
         dueDate = LocalDate.now().plusWeeks(4);
@@ -194,12 +147,11 @@ public class MainFrame extends JFrame {
         try {
             Statement statement = conn.createStatement();
 
-            ResultSet rs = statement.executeQuery("SELECT status " +
-                                                  "FROM books_table " +
-                                                  "WHERE title = '" + input + "'");
-            while (rs.next()){
+            ResultSet rs = statement.executeQuery(
+                    "SELECT status " + "FROM books_table " + "WHERE title = '" + input + "'");
+            while (rs.next()) {
                 String status = rs.getString("status");
-                if (status.equals("Checked Out")){
+                if (status.equals("Checked Out")) {
                     isCheckedOut = true;
                 }
             }
@@ -208,13 +160,12 @@ public class MainFrame extends JFrame {
 
             throw new RuntimeException(e);
         }
-        if (!isCheckedOut){
+        if (!isCheckedOut) {
             try {
                 Statement stmt = conn.createStatement();
-                String sqlStatement = "UPDATE books_table " +
-                                      "SET status = 'Checked Out', " +
-                                      "due_date = '" + dueDateText + "' " +
-                                      "WHERE title = '" + input + "'";
+                String sqlStatement =
+                        "UPDATE books_table " + "SET status = 'Checked Out', " + "due_date = '" + dueDateText + "' " +
+                        "WHERE title = '" + input + "'";
                 int rows = stmt.executeUpdate(sqlStatement);
                 updateSQLiteTable();
 
@@ -222,7 +173,7 @@ public class MainFrame extends JFrame {
                 if (rows == 0) {
                     systemMessages.setText("Title '" + title + "' does not exist");
                 }
-                if (rows >0){
+                if (rows > 0) {
                     systemMessages.setText("Book '" + title + "' checked out");
                 }
 
@@ -233,10 +184,9 @@ public class MainFrame extends JFrame {
 
         }
 
-        if(isCheckedOut){
+        if (isCheckedOut) {
             systemMessages.setText("Book already checked out");
         }
-
 
 
     }
@@ -259,14 +209,13 @@ public class MainFrame extends JFrame {
                     systemMessages.setText("Book with barcode '" + barcodeOrTitle + "' deleted");
                 }
 
-
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
 
         } else {
-            System.out.println("Title Enetered");
+            System.out.println("Title Entered");
 
             try {
                 Statement stmt = conn.createStatement();
@@ -290,46 +239,6 @@ public class MainFrame extends JFrame {
 
     }
 
-    private void loadTable(String fileName) {
-
-
-        database.readFile(this.fileName);
-        fileNameField.setText("");
-        database.getBooks();
-        books = database.showBooks();
-        //systemMessages.setText(this.fileName + " database file loaded");
-
-
-        keys = new TreeSet<>(books.keySet());
-        Object[] obj = new Object[6];
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-        model.setRowCount(0);
-        for (Integer i : keys) {
-            barcodeID = books.get(i).getBarcodeID();
-            title = books.get(i).getTitle();
-            author = books.get(i).getAuthor();
-            genre = books.get(i).getGenre();
-            status = books.get(i).getStatus();
-            dueDate = books.get(i).getDueDate();
-            String formattedDate = "";
-            if (dueDate == null) {
-                formattedDate = "null";
-            } else {
-                formattedDate = dtFormatter.format(dueDate).toString();
-            }
-
-            obj[0] = barcodeID;
-            obj[1] = title;
-            obj[2] = author;
-            obj[3] = genre;
-            obj[4] = status;
-            obj[5] = dueDate;
-
-            model.addRow(obj);
-        }
-
-
-    }
 
     MainFrame() {
         setContentPane(mainPanel);
@@ -380,8 +289,8 @@ public class MainFrame extends JFrame {
 
                 try {
                     if (!conn.isClosed()) {
-                        systemMessages.setText("Enter the book barcode number or title for the book you wish to " +
-                                               "delete");
+                        systemMessages.setText(
+                                "Enter the book barcode number or title for the book you wish to " + "delete");
                         Component[] obj = sidePanel.getComponents();
 
                         for (Component o : obj) {
@@ -396,8 +305,7 @@ public class MainFrame extends JFrame {
 
                     }
                 } catch (Exception e2) {
-                    systemMessages.setText("Please select a database first\n" +
-                                           "-- NO DATABASE LOADED --");
+                    systemMessages.setText("Please select a database first\n" + "-- NO DATABASE LOADED --");
                 }
 
 
@@ -413,12 +321,15 @@ public class MainFrame extends JFrame {
 
                 ///load table
                 try {
-                    connect(fileName);
+
+                    conn = db.connect(fileName);
+                    //connect(fileName);
                     updateSQLiteTable();
                     systemMessages.setText("Database file '" + fileName + "' loaded");
                 } catch (Exception e1) {
                     // don't try and load table
-                    systemMessages.setText("Could not load database '" + fileName + "'");
+                    systemMessages.setText(e1.getMessage());
+
                 }
 
 
@@ -444,10 +355,6 @@ public class MainFrame extends JFrame {
                 deleteBook(barcodeOrTitle);
 
                 // end of delete code
-
-                //String deleteMessage = database.deleteBooks(barcodeOrTitle);
-                //systemMessages.setText(deleteMessage);
-                //loadTable(fileName);
 
                 // UI elements closing side panel
                 sidePanel.setVisible(false);
@@ -496,8 +403,7 @@ public class MainFrame extends JFrame {
                         checkBookOutButton.setVisible(true);
                     }
                 } catch (Exception e2) {
-                    systemMessages.setText("Please select a database first\n" +
-                                           "-- NO DATABASE LOADED --");
+                    systemMessages.setText("Please select a database first\n" + "-- NO DATABASE LOADED --");
                 }
 
 
@@ -510,9 +416,7 @@ public class MainFrame extends JFrame {
                 checkOutBook(input);
 
 
-                //String checkOutStatus = database.checkOutBooks(input);
-                //systemMessages.setText(checkOutStatus);
-                //loadTable(fileName);
+
                 sidePanel.setVisible(false);
 
 
@@ -536,8 +440,7 @@ public class MainFrame extends JFrame {
                         checkBookInButton.setVisible(true);
                     }
                 } catch (Exception e2) {
-                    systemMessages.setText("Please select a database first\n" +
-                                           "-- NO DATABASE LOADED --");
+                    systemMessages.setText("Please select a database first\n" + "-- NO DATABASE LOADED --");
                 }
 
             }
@@ -552,9 +455,7 @@ public class MainFrame extends JFrame {
 
                 //end of checkin code
 
-                //String checkInStatus = database.checkInBooks(input);
-                //systemMessages.setText(checkInStatus);
-                //loadTable(fileName);
+
                 sidePanel.setVisible(false);
             }
         });
